@@ -1,0 +1,107 @@
+{
+    "id": "Angela",
+    "level": 1,
+    "levelFloor": 0,
+    "levelCeiling": 10,
+    "currentLevel": 4,
+    "dailyGoal": 30,
+    "dailyProgress": 25,
+    "coins": 100,
+    "highestTypeAllowed": "Dragon",
+    "highestPatternAllowed": "Mottled",
+    "owned_dragons": [
+        {
+            "id": "123",
+            "dragonType": "Dragon",
+            "dragonPattern": "Basic",
+            "dragonMain": "Black",
+            "dragonSecond": "White",
+            "dragonAge": "Baby",
+            "dragonSellingPrice": 100,
+            "dragonImageLocation": "https://tulpagotchi-images.s3.us-east-1.amazonaws.com/images/tulpagotchi-images/Dragon/Basic/Basic_Baby/Basic_Baby_Black_White.png"
+        },
+        {
+            "id": "234",
+            "dragonType": "Dragon",
+            "dragonPattern": "Striped",
+            "dragonMain": "Green",
+            "dragonSecond": "Orange",
+            "dragonAge": "Baby",
+            "dragonSellingPrice": 150,
+            "dragonImageLocation": "https://tulpagotchi-images.s3.us-east-1.amazonaws.com/images/tulpagotchi-images/Dragon/Striped/Striped_Baby/Striped_Baby_Green_Orange.png"
+        },
+        {
+            "id": "345",
+            "dragonType": "Kraken",
+            "dragonPattern": "Basic",
+            "dragonMain": "Red",
+            "dragonSecond": "Green",
+            "dragonAge": "Adult",
+            "dragonSellingPrice": 200,
+            "dragonImageLocation": "https://tulpagotchi-images.s3.us-east-1.amazonaws.com/images/tulpagotchi-images/Kraken/Basic/Basic_Adult/Basic_Adult_Red_Green.png"
+        },
+        {
+            "id": "456",
+            "dragonType": "Dragon",
+            "dragonPattern": "Basic",
+            "dragonMain": "Black",
+            "dragonSecond": "White",
+            "dragonAge": "Egg",
+            "dragonSellingPrice": 50,
+            "dragonImageLocation": "https://tulpagotchi-images.s3.us-east-1.amazonaws.com/images/egg.png"
+        }
+    ],
+    "dragondexEntries":
+    [
+        {
+            "id": "abc",
+            "dragonType": "Dragon",
+            "dragonPattern": "Basic",
+            "dragonMain": "Black",
+            "dragonSecond": "White",
+            "dragonAge": "Baby",
+            "dragonSellingPrice": 50,
+            "dragonImageLocation": "https://tulpagotchi-images.s3.us-east-1.amazonaws.com/images/egg.png"
+        },
+        {
+            "id": "abcd",
+            "dragonType": "Dragon",
+            "dragonPattern": "Striped",
+            "dragonMain": "Green",
+            "dragonSecond": "Orange",
+            "dragonAge": "Egg",
+            "dragonSellingPrice": 50,
+            "dragonImageLocation": "https://tulpagotchi-images.s3.us-east-1.amazonaws.com/images/egg.png"
+        },
+        {
+            "id": "abcde",
+            "dragonType": "Kraken",
+            "dragonPattern": "Basic",
+            "dragonMain": "Red",
+            "dragonSecond": "Green",
+            "dragonAge": "Egg",
+            "dragonSellingPrice": 50,
+            "dragonImageLocation": "https://tulpagotchi-images.s3.us-east-1.amazonaws.com/images/egg.png"
+        }
+    ],
+    "projects": [
+        {
+            "id": "Project1",
+            "name": "Project 1",
+            "text": "This is project 1",
+            "totalWords": 4
+        },
+        {
+            "id": "Project2",
+            "name": "Project 2",
+            "text": "This is another project",
+            "totalWords": 4
+        },
+        {
+            "id": "Project3",
+            "name": "Project 3",
+            "text": "This is the final project",
+            "totalWords": 5
+        }
+    ]
+}
