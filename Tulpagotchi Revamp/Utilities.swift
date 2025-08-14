@@ -20,18 +20,18 @@ enum Utilities {
         return randomString
     }
     
-    /*
+    
     //return the image location
     static func returnImageLocation(dragon: Dragon, owned: Bool = true) -> URL {
         let baseURL = "\(Constants.imageBaseUrl)/images/tulpagotchi-images/"
         var imageURL: String = ""
         
         if !owned {
-            imageURL = baseURL + "tulpagotchi-images/\(dragon.dragonType)/\(dragon.dragonType)Shadow.png"
-        } else if dragon.dragonAge == Dragon.DragonAge.Egg {
+            imageURL = baseURL + "tulpagotchi-images/\(dragon.dragonType ?? "Dragon")/\(dragon.dragonType ?? "Dragon")Shadow.png"
+        } else if dragon.dragonAge == DragonStruct.DragonAge.Egg.rawValue {
             imageURL = "\(Constants.imageBaseUrl)/images/egg.png"
         } else {
-            imageURL = baseURL +  "\(dragon.dragonType)/\(dragon.dragonPattern)/\(dragon.dragonPattern)_\(dragon.dragonAge)/\(dragon.dragonPattern)_\(dragon.dragonAge)_\(dragon.dragonMain)_\(dragon.dragonSecond).png"
+            imageURL = baseURL +  "\(dragon.dragonType ?? "Dragon")/\(dragon.dragonPattern ?? "Basic")/\(dragon.dragonPattern ?? "Basic")_\(dragon.dragonAge ?? "Baby")/\(dragon.dragonPattern ?? "Basic")_\(dragon.dragonAge ?? "Black")_\(dragon.dragonMain ?? "Black")_\(String(describing: dragon.dragonSecond)).png"
         }
         return URL(string: imageURL)!
         
@@ -39,8 +39,8 @@ enum Utilities {
     
     
      //return the price to clone a dragon
-     static func returnCloningPrice(type: DragonType, pattern: DragonPattern, color: MainColor, secondColor: SecondaryColor) -> Int {
-     var cloningPrice = 0
+    static func returnCloningPrice(type: DragonStruct.DragonType, pattern: DragonStruct.DragonPattern, color: DragonStruct.MainColor, secondColor: DragonStruct.SecondaryColor) -> Int16 {
+        var cloningPrice: Int16 = 0
      
      switch(type) {
      
@@ -129,110 +129,130 @@ enum Utilities {
      }
      
      //return the selling price based on the dragon's characteristics
-     static func returnSellingPrice(dragon: Dragon) -> Int {
-     var sellingPrice = 0
+     static func returnSellingPrice(dragon: Dragon) -> Int16 {
+         var sellingPrice : Int16 = 0
      
      switch(dragon.dragonAge) {
-     case .All:
+     case "All":
      sellingPrice += 0
-     case .Egg:
+     case "Egg":
      sellingPrice += 0
-     case .Baby:
+     case "Baby":
      sellingPrice += 100
-     case .Adult:
+     case "Adult":
      sellingPrice += 200
+     case .none:
+         sellingPrice += 0
+     case .some(_):
+         sellingPrice += 0
      }
      
      switch(dragon.dragonType) {
-     case .Dragon:
+     case "Dragon":
      sellingPrice += 50
-     case .Gryphon:
+     case "Gryphon":
      sellingPrice += 100
-     case .Phoenix:
+     case "Phoenix":
      sellingPrice += 150
-     case .Kraken:
+     case "Kraken":
      sellingPrice += 200
-     case .Cthulhu:
+     case "Cthulhu":
      sellingPrice += 250
-     case .All:
+     case "All":
      sellingPrice += 0
+     case .none:
+         sellingPrice += 0
+     case .some(_):
+         sellingPrice += 0
      }
      
      switch(dragon.dragonPattern)
      {
      
-     case .Basic:
+     case "Basic":
      sellingPrice += 25
-     case .Striped:
+     case "Striped":
      sellingPrice += 50
-     case .Mottled:
+     case "Mottled":
      sellingPrice += 75
-     case .All:
+     case "All":
      sellingPrice += 0
+     case .none:
+         sellingPrice += 0
+     case .some(_):
+         sellingPrice += 0
      }
      
      switch(dragon.dragonMain)
      {
      
-     case .Red:
+     case "Red":
      sellingPrice += 10
-     case .Orange:
+     case "Orange":
      sellingPrice += 11
-     case .Yellow:
+     case "Yellow":
      sellingPrice += 12
-     case .Green:
+     case "Green":
      sellingPrice += 13
-     case .Cyan:
+     case "Cyan":
      sellingPrice += 14
-     case .Blue:
+     case "Blue":
      sellingPrice += 15
-     case .Purple:
+     case "Purple":
      sellingPrice += 16
-     case .Pink:
+     case "Pink":
      sellingPrice += 17
-     case .Brown:
+     case "Brown":
      sellingPrice += 18
-     case .Black:
+     case "Black":
      sellingPrice += 19
-     case .White:
+     case "White":
      sellingPrice += 20
-     case .Rainbow:
+     case "Rainbow":
      sellingPrice += 21
-     case .All:
+     case "All":
      sellingPrice += 0
+     case .none:
+         sellingPrice += 0
+     case .some(_):
+         sellingPrice += 0
      }
      
      switch(dragon.dragonSecond)
      {
      
-     case .Red:
+     case "Red":
      sellingPrice += 1
-     case .Orange:
+     case "Orange":
      sellingPrice += 2
-     case .Yellow:
+     case "Yellow":
      sellingPrice += 3
-     case .Green:
+     case "Green":
      sellingPrice += 4
-     case .Cyan:
+     case "Cyan":
      sellingPrice += 5
-     case .Blue:
+     case "Blue":
      sellingPrice += 6
-     case .Purple:
+     case "Purple":
      sellingPrice += 7
-     case .Pink:
+     case "Pink":
      sellingPrice += 8
-     case .Brown:
+     case "Brown":
      sellingPrice += 9
-     case .Black:
+     case "Black":
      sellingPrice += 10
-     case .White:
+     case "White":
      sellingPrice += 11
-     case .All:
+     case "All":
      sellingPrice += 0
+     case .none:
+         sellingPrice += 0
+     case .some(_):
+         sellingPrice += 0
      }
      
      return sellingPrice
      }
      
-     */
+     
 }

@@ -16,6 +16,12 @@ struct ContentView: View {
         animation: .default)
     private var user: FetchedResults<User>
     
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \Dragon.id, ascending: true)],
+        animation: .default
+    )
+    private var dragons: FetchedResults<Dragon>
+    
     @State var userName: String = "Bruno"
 
     var body: some View {
@@ -26,22 +32,24 @@ struct ContentView: View {
                 List {
                     ForEach(user) { user in
                         NavigationLink {
-                            Text("\(user.id ?? "Unknown ID")")
+                            UserAndDragonView(user: user, dragons: dragons)
+                            
+                            
                         } label: {
                             Text("\(user.id ?? "Unknown ID")")
                         }
                     }
                 }
-                
-                //            .toolbar {
-                //                ToolbarItem(placement: .navigationBarTrailing) {
-                //                    EditButton()
-                //                }
-                //                ToolbarItem {
-                //                    Button("Add Item", systemImage: "plus") {
-                //                    }
-                //                }
-                //            }
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        EditButton()
+                    }
+                    ToolbarItem {
+                        Button("Add Item", systemImage: "plus") {
+                            saveUser()
+                        }
+                    }
+                }
             }
         }
     }
@@ -57,6 +65,26 @@ struct ContentView: View {
         newUser.dailyProgress = 0
         newUser.coins = 0
         
+        let newDragon1 = Dragon(context: viewContext)
+        newDragon1.id = Utilities.generateRandomGuid(length: 10)
+        newDragon1.dragonType =  DragonStruct.DragonType.Dragon.rawValue
+        newDragon1.dragonPattern = DragonStruct.DragonPattern.Basic.rawValue
+        newDragon1.dragonMain = DragonStruct.MainColor.Green.rawValue
+        newDragon1.dragonSecond = DragonStruct.SecondaryColor.Green.rawValue
+        newDragon1.dragonImageLocation =  Utilities.returnImageLocation(dragon: newDragon1)
+        newDragon1.dragonSellingPrice = Utilities.returnSellingPrice(dragon: newDragon1)
+        newDragon1.dragonCloningPrice = Utilities.returnCloningPrice(type: DragonStruct.DragonType(rawValue: newDragon1.dragonType!) ?? DragonStruct.DragonType.Dragon, pattern: DragonStruct.DragonPattern(rawValue: newDragon1.dragonPattern!) ?? DragonStruct.DragonPattern.Basic, color: DragonStruct.MainColor(rawValue: newDragon1.dragonMain!) ?? DragonStruct.MainColor.Black, secondColor: DragonStruct.SecondaryColor(rawValue: newDragon1.dragonSecond!) ?? DragonStruct.SecondaryColor.Black)
+        
+        
+        let newDragon2 = Dragon(context: viewContext)
+        newDragon2.id = Utilities.generateRandomGuid(length: 10)
+        newDragon2.dragonType =  DragonStruct.DragonType.Dragon.rawValue
+        newDragon2.dragonPattern = DragonStruct.DragonPattern.Basic.rawValue
+        newDragon2.dragonMain = DragonStruct.MainColor.Brown.rawValue
+        newDragon2.dragonSecond = DragonStruct.SecondaryColor.Brown.rawValue
+        newDragon2.dragonImageLocation =  Utilities.returnImageLocation(dragon: newDragon1)
+        newDragon2.dragonSellingPrice = Utilities.returnSellingPrice(dragon: newDragon1)
+        newDragon2.dragonCloningPrice = Utilities.returnCloningPrice(type: DragonStruct.DragonType(rawValue: newDragon2.dragonType!) ?? DragonStruct.DragonType.Dragon, pattern: DragonStruct.DragonPattern(rawValue: newDragon2.dragonPattern!) ?? DragonStruct.DragonPattern.Basic, color: DragonStruct.MainColor(rawValue: newDragon2.dragonMain!) ?? DragonStruct.MainColor.Black, secondColor: DragonStruct.SecondaryColor(rawValue: newDragon2.dragonSecond!) ?? DragonStruct.SecondaryColor.Black)
         
         do {
             try viewContext.save()
@@ -68,4 +96,19 @@ struct ContentView: View {
 
 #Preview {
     ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+}
+
+struct UserAndDragonView: View {
+    let user: User
+    let dragons: FetchedResults<Dragon>
+    
+    var body: some View {
+        VStack {
+            Text(user.id ?? "Unknown User")
+            
+            ForEach(dragons) {dragon in
+                Text("\(dragon.id ?? "Unknown Dragon")")
+            }
+        }
+    }
 }
