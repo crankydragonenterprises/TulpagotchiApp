@@ -88,20 +88,47 @@
         {
             "id": "Project1",
             "name": "Project 1",
-            "text": "This is project 1",
+            "entries": [
+                {
+                    "id": 1,
+                    "text": "This is entry 1"
+                },
+                {
+                    "id": 2,
+                    "text": "This is entry 1"
+                },
+            ],
             "totalWords": 4
         },
         {
-            "id": "Project2",
-            "name": "Project 2",
-            "text": "This is another project",
+            "id": "Project1",
+            "name": "Project 1",
+            "entries": [
+                {
+                    "id": 3,
+                    "text": "This is entry 1"
+                },
+                {
+                    "id": 4,
+                    "text": "This is entry 1"
+                },
+            ],
             "totalWords": 4
         },
         {
-            "id": "Project3",
-            "name": "Project 3",
-            "text": "This is the final project",
-            "totalWords": 5
+            "id": "Project1",
+            "name": "Project 1",
+            "entries": [
+                {
+                    "id": 5,
+                    "text": "This is entry 1"
+                },
+                {
+                    "id": 6,
+                    "text": "This is entry 1"
+                },
+            ],
+            "totalWords": 4
         }
     ]
 }
