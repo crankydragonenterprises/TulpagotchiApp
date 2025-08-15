@@ -154,8 +154,8 @@ struct Dashboard: View {
                             {
                                 ForEach(dragons) { dragon in
                                     NavigationLink {
-                                        //GrowSheet(dragonToGrow: dragon)
-                                        Text( dragon.dragonImageLocation?.absoluteString ?? "No Image" )
+                                        GrowDragonView()
+                                        //Text( dragon.dragonMain ?? "No Dragon" )
                                     } label: {
                                         AsyncImage(url: dragon.dragonImageLocation) { image in
                                             image

@@ -26,7 +26,7 @@ struct ContentView: View {
     private let randomDragon: DragonStruct = DragonStruct.returnRandomDragon(age: DragonStruct.DragonAge.Baby)
 
     var body: some View {
-        if(dragons.count < 3) {
+        if(dragons.count == 0) {
             GeometryReader { geo in
                 ZStack {
                     Image(.rainbow1)
@@ -70,26 +70,6 @@ struct ContentView: View {
         }
         else {
             Dashboard()
-//            NavigationView() {
-//                List {
-//                    ForEach(user) { user in
-//                        NavigationLink {
-//                            UserAndDragonView(user: user, dragons: dragons)
-//                            
-//                            
-//                        } label: {
-//                            Text("Go to \(user.id!)'s Dashboard")
-//                        }
-//                    }
-//                }
-////                .toolbar {
-////                    ToolbarItem {
-////                        Button("Add Item", systemImage: "plus") {
-////                            saveNewUser(newUserName: userName)
-////                        }
-////                    }
-////                }
-//            }
         }
     }
     
@@ -122,8 +102,8 @@ struct ContentView: View {
         newDragon2.dragonPattern = DragonStruct.DragonPattern.Basic.rawValue
         newDragon2.dragonMain = DragonStruct.MainColor.Brown.rawValue
         newDragon2.dragonSecond = DragonStruct.SecondaryColor.Brown.rawValue
-        newDragon2.dragonImageLocation =  Utilities.returnImageLocation(dragon: newDragon1)
-        newDragon2.dragonSellingPrice = Utilities.returnSellingPrice(dragon: newDragon1)
+        newDragon2.dragonImageLocation =  Utilities.returnImageLocation(dragon: newDragon2)
+        newDragon2.dragonSellingPrice = Utilities.returnSellingPrice(dragon: newDragon2)
         newDragon2.dragonCloningPrice = Utilities.returnCloningPrice(type: DragonStruct.DragonType(rawValue: newDragon2.dragonType!) ?? DragonStruct.DragonType.Dragon, pattern: DragonStruct.DragonPattern(rawValue: newDragon2.dragonPattern!) ?? DragonStruct.DragonPattern.Basic, color: DragonStruct.MainColor(rawValue: newDragon2.dragonMain!) ?? DragonStruct.MainColor.Black, secondColor: DragonStruct.SecondaryColor(rawValue: newDragon2.dragonSecond!) ?? DragonStruct.SecondaryColor.Black)
         
         do {
@@ -137,18 +117,3 @@ struct ContentView: View {
 #Preview {
     ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
 }
-
-//struct UserAndDragonView: View {
-//    let user: User
-//    let dragons: FetchedResults<Dragon>
-//    
-//    var body: some View {
-//        VStack {
-//            Text("User ID: \(user.id ?? "Unknown User")")
-//            
-//            ForEach(dragons) {dragon in
-//                Text("Dragon ID: \(dragon.id ?? "Unknown Dragon")")
-//            }
-//        }
-//    }
-//}
