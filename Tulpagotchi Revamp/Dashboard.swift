@@ -44,12 +44,13 @@ struct Dashboard: View {
         //combine predicate and return
         return NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
     }
+    
     //progress
     var progressLevel: Double {
-        Double(user[0].currentLevel / (user[0].levelCeiling - user[0].levelFloor))
+        return (Double(user[0].level) / (Double(user[0].levelCeiling) - Double(user[0].levelFloor)))
     }
     var dailyProgressPercentage : Double {
-        Double(user[0].dailyProgress / user[0].dailyGoal)
+        return (Double(user[0].dailyProgress) / Double(user[0].dailyGoal))
     }
     
     //Filters
@@ -61,8 +62,9 @@ struct Dashboard: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(.green)
-                    .opacity(0.2)
+                Image(.rainbow2)
+                    .resizable()
+                    .opacity(0.7)
                     .ignoresSafeArea()
                 VStack (alignment: .leading) {
                     Text("Hello, \(user[0].id!)")
@@ -70,15 +72,21 @@ struct Dashboard: View {
                         .fontWeight(.bold)
                     
                     //level progress view
-                    DashboardProgressView(title: "Level Progress", progressLevel: progressLevel)
-                    Text("Level \(user[0].level)")
+                    VStack (alignment: .leading) {
+                        DashboardProgressView(title: "Level Progress", progressLevel: progressLevel)
+                        
+                        Text("Level \(user[0].level)")
+                        
+                        //daily progress view
+                        DashboardProgressView(title: "Daily Progress", progressLevel: dailyProgressPercentage)
+                        
+                        //coins
+                        Text("Coins: \(user[0].coins)")
+                    }
+                    .padding()
+                    .background(.white.opacity(0.5))
                     
-                    //daily progress view
-                    DashboardProgressView(title: "Daily Progress", progressLevel: dailyProgressPercentage)
-                    
-                    //coins
-                    Text("Coins: \(user[0].coins)")
-                    
+                    //Filters
                     HStack
                     {
                         Menu {
@@ -138,6 +146,7 @@ struct Dashboard: View {
                     .foregroundStyle(.black)
                     .opacity(0.50)
                     
+                    //Dragon Area
                     ZStack {
                         Color(.white).opacity(0.5)
                         ScrollView {
@@ -163,7 +172,7 @@ struct Dashboard: View {
                         .padding()
                     }
                     
-                    Text("Selected Filters: type: \(selectedType), pattern: \(selectedPattern), color: \(selectedColor), age: \(selectedAge)")
+                    Text("")
                 }
                 .padding()
             }
@@ -178,6 +187,7 @@ struct Dashboard: View {
             HStack {
                 Text(title)
                 ProgressView(value: progressLevel)
+                    .border(.black, width: 0.1)
                     .scaleEffect(y:6)
                     .tint(.green)
             }

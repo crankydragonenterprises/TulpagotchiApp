@@ -26,39 +26,44 @@ struct ContentView: View {
     private let randomDragon: DragonStruct = DragonStruct.returnRandomDragon(age: DragonStruct.DragonAge.Baby)
 
     var body: some View {
-        if(dragons.count == 0) {
-            
-            ZStack {
-                Color(.blue)
-                    .opacity(0.2)
-                    .ignoresSafeArea()
-                ContentUnavailableView {
-                    Label("What is your name", systemImage: "questionmark.circle.fill")
-                } description: {
-                    VStack {
-                        AsyncImage(url: randomDragon.dragonImageLocation)
-                        { image in
-                            image
-                                .resizable()
-                                .scaledToFit()
-                                .padding()
-                                .shadow(color: .white, radius: 2)
-                        } placeholder: {
-                            ProgressView()
+        if(dragons.count < 3) {
+            GeometryReader { geo in
+                ZStack {
+                    Image(.rainbow1)
+                        .resizable()
+                        .frame(width: geo.size.width, height: geo.size.height * 1.125)
+                        .opacity(0.4)
+                        .ignoresSafeArea()
+                    
+                    ContentUnavailableView {
+                        Label("What is your name", systemImage: "questionmark.circle.fill")
+                    } description: {
+                        VStack {
+                            AsyncImage(url: randomDragon.dragonImageLocation)
+                            { image in
+                                image
+                                    .resizable()
+                                    .scaledToFit()
+                                    .padding()
+                                    .shadow(color: .white, radius: 2)
+                            } placeholder: {
+                                ProgressView()
+                            }
+                            
+                            TextField("Enter name here", text: $userName)
+                                .textFieldStyle(.roundedBorder)        // modern style
+                                .textInputAutocapitalization(.never)   // optional customization
+                                .autocorrectionDisabled(true)
+                                .padding(.horizontal, 50)
                         }
-                        
-                        TextField("Enter name here", text: $userName)
-                            .textFieldStyle(.roundedBorder)        // modern style
-                            .textInputAutocapitalization(.never)   // optional customization
-                            .autocorrectionDisabled(true)
-                            .padding()
-                    }
-                } actions: {
-                    if !userName.isEmpty {
-                        Button ("Get your first dragons", systemImage: "lizard.fill") {
-                            saveNewUser(newUserName: userName)
+                        .padding()
+                    } actions: {
+                        if !userName.isEmpty {
+                            Button ("Get your first dragons", systemImage: "lizard.fill") {
+                                saveNewUser(newUserName: userName)
+                            }
+                            .buttonStyle(.borderedProminent)
                         }
-                        .buttonStyle(.borderedProminent)
                     }
                 }
             }

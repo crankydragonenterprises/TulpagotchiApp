@@ -20,7 +20,7 @@ struct PersistenceController {
         newUser.level = 1
         newUser.levelFloor = 0
         newUser.levelCeiling = 100
-        newUser.currentLevel = 1
+        newUser.currentLevel = 37
         newUser.dailyGoal = 200
         newUser.dailyProgress = 50
         newUser.coins = 75
