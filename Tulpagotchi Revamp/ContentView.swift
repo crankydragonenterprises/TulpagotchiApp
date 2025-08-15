@@ -102,8 +102,8 @@ struct ContentView: View {
         newDragon2.dragonPattern = DragonStruct.DragonPattern.Basic.rawValue
         newDragon2.dragonMain = DragonStruct.MainColor.Brown.rawValue
         newDragon2.dragonSecond = DragonStruct.SecondaryColor.Brown.rawValue
-        newDragon2.dragonImageLocation =  Utilities.returnImageLocation(dragon: newDragon2)
-        newDragon2.dragonSellingPrice = Utilities.returnSellingPrice(dragon: newDragon2)
+        newDragon2.dragonImageLocation =  Utilities.returnImageLocation(dragon: newDragon1)
+        newDragon2.dragonSellingPrice = Utilities.returnSellingPrice(dragon: newDragon1)
         newDragon2.dragonCloningPrice = Utilities.returnCloningPrice(type: DragonStruct.DragonType(rawValue: newDragon2.dragonType!) ?? DragonStruct.DragonType.Dragon, pattern: DragonStruct.DragonPattern(rawValue: newDragon2.dragonPattern!) ?? DragonStruct.DragonPattern.Basic, color: DragonStruct.MainColor(rawValue: newDragon2.dragonMain!) ?? DragonStruct.MainColor.Black, secondColor: DragonStruct.SecondaryColor(rawValue: newDragon2.dragonSecond!) ?? DragonStruct.SecondaryColor.Black)
         
         do {
@@ -117,3 +117,18 @@ struct ContentView: View {
 #Preview {
     ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
 }
+
+//struct UserAndDragonView: View {
+//    let user: User
+//    let dragons: FetchedResults<Dragon>
+//    
+//    var body: some View {
+//        VStack {
+//            Text("User ID: \(user.id ?? "Unknown User")")
+//            
+//            ForEach(dragons) {dragon in
+//                Text("Dragon ID: \(dragon.id ?? "Unknown Dragon")")
+//            }
+//        }
+//    }
+//}

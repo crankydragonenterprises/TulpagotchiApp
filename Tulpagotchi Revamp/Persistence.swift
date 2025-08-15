@@ -10,7 +10,17 @@ import CoreData
 struct PersistenceController {
     static let shared = PersistenceController()
 
-    @MainActor
+    static var previewBabyDragon: Dragon {
+        let context = PersistenceController.preview.container.viewContext
+        
+        let fetchRequest: NSFetchRequest<Dragon> = Dragon.fetchRequest()
+        fetchRequest.fetchLimit = 1
+        
+        let results = try! context.fetch(fetchRequest)
+        
+        return results.first!
+    }
+    
     static let preview: PersistenceController = {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
@@ -31,7 +41,7 @@ struct PersistenceController {
         newDragon1.id = Utilities.generateRandomGuid(length: 10)
         newDragon1.dragonType =  DragonStruct.DragonType.Dragon.rawValue
         newDragon1.dragonPattern = DragonStruct.DragonPattern.Basic.rawValue
-        newDragon1.dragonAge = DragonStruct.DragonAge.Baby.rawValue
+        newDragon1.dragonAge = DragonStruct.DragonAge.Adult.rawValue
         newDragon1.dragonMain = DragonStruct.MainColor.Green.rawValue
         newDragon1.dragonSecond = DragonStruct.SecondaryColor.Green.rawValue
         newDragon1.dragonImageLocation =  Utilities.returnImageLocation(dragon: newDragon1)
@@ -49,7 +59,7 @@ struct PersistenceController {
         newDragon2.dragonPattern = DragonStruct.DragonPattern.Basic.rawValue
         newDragon2.dragonMain = DragonStruct.MainColor.Brown.rawValue
         newDragon2.dragonSecond = DragonStruct.SecondaryColor.Brown.rawValue
-        newDragon2.dragonAge = DragonStruct.DragonAge.Baby.rawValue
+        newDragon2.dragonAge = DragonStruct.DragonAge.Adult.rawValue
         newDragon2.dragonImageLocation =  Utilities.returnImageLocation(dragon: newDragon2)
         newDragon2.dragonSellingPrice = Utilities.returnSellingPrice(dragon: newDragon2)
         newDragon2.dragonCloningPrice = Utilities.returnCloningPrice(

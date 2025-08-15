@@ -10,27 +10,24 @@ import SwiftUI
 struct GrowDragonView: View {
     @Environment(\.managedObjectContext) private var viewContext
     
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Dragon.id, ascending: true)],
-        animation: .default
-    )
-    private var dragons: FetchedResults<Dragon>
-    
-    private var dragon: Dragon {
-        dragons[0]
-    }
+    @EnvironmentObject private var dragon: Dragon
     
     var body: some View {
-        AsyncImage(url: dragon.dragonImageLocation) { image in
-            image
-                .resizable()
-                .scaledToFit()
-        } placeholder : {
-            ProgressView()
+        if dragon.dragonAge == "Baby" || dragon.dragonAge == "Egg" {
+            GrowBabyAndEggView()
+        } else if dragon.dragonAge == "Adult" {
+            GrowAdultView()
         }
+        else {
+            Text("Your dragon is somehow not an age")
+        }
+            
     }
 }
 
 #Preview {
-    GrowDragonView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+    NavigationStack {
+        GrowDragonView()
+            .environmentObject(PersistenceController.previewBabyDragon)
+    }
 }
