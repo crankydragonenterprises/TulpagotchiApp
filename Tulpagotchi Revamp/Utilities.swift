@@ -20,6 +20,26 @@ enum Utilities {
         return randomString
     }
     
+    static func generateRandomDragonStruct(age ofAge: DragonStruct.DragonAge) -> DragonStruct {
+        
+        var dragon = DragonStruct(
+            dragonType: DragonStruct.DragonType.allCases.dropLast().randomElement() ?? DragonStruct.DragonType.Dragon,
+            dragonPattern: DragonStruct.DragonPattern.allCases.dropLast().randomElement() ?? DragonStruct.DragonPattern.Basic,
+            dragonMain: DragonStruct.MainColor.allCases.dropLast().randomElement() ?? DragonStruct.MainColor.Black,
+            dragonSecond: DragonStruct.SecondaryColor.allCases.dropLast().randomElement() ?? DragonStruct.SecondaryColor.White,
+            dragonAge: ofAge,
+            dragonSellingPrice: 0,
+            dragonImageLocation: URL(string:"https://www.google.com")!,
+            id: generateRandomGuid(length: 10)
+            )
+        let imageURL = DragonStruct.returnImageLocation(dragon: dragon)
+        dragon.dragonImageLocation = imageURL
+        dragon.dragonSellingPrice = DragonStruct.returnSellingPrice(dragon: dragon)
+        
+            
+        return dragon
+        
+    }
     
     //return the image location
     static func returnImageLocation(dragon: Dragon, owned: Bool = true) -> URL {
@@ -31,7 +51,8 @@ enum Utilities {
         } else if dragon.dragonAge == DragonStruct.DragonAge.Egg.rawValue {
             imageURL = "\(Constants.imageBaseUrl)/images/egg.png"
         } else {
-            imageURL = baseURL +  "\(dragon.dragonType ?? "Dragon")/\(dragon.dragonPattern ?? "Basic")/\(dragon.dragonPattern ?? "Basic")_\(dragon.dragonAge ?? "Baby")/\(dragon.dragonPattern ?? "Basic")_\(dragon.dragonAge ?? "Black")_\(dragon.dragonMain ?? "Black")_\(String(describing: dragon.dragonSecond)).png"
+            //Dragon/Basic/Basic_Baby/Basic_Baby_Black_Black.png
+            imageURL = baseURL +  "\(dragon.dragonType ?? "Dragon")/\(dragon.dragonPattern ?? "Basic")/\(dragon.dragonPattern ?? "Basic")_\(dragon.dragonAge ?? "Baby")/\(dragon.dragonPattern ?? "Basic")_\(dragon.dragonAge ?? "Baby")_\(dragon.dragonMain ?? "Black")_\(dragon.dragonSecond ?? "Black").png"
         }
         return URL(string: imageURL)!
         

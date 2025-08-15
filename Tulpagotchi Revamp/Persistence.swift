@@ -27,20 +27,21 @@ struct PersistenceController {
         newUser.highestTypeAllowed = "Dragon"
         newUser.highestPatternAllowed = "Mottled"
         
-//        let newDragon1 = Dragon(context: viewContext)
-//        newDragon1.id = Utilities.generateRandomGuid(length: 10)
-//        newDragon1.dragonType =  DragonStruct.DragonType.Dragon.rawValue
-//        newDragon1.dragonPattern = DragonStruct.DragonPattern.Basic.rawValue
-//        newDragon1.dragonMain = DragonStruct.MainColor.Green.rawValue
-//        newDragon1.dragonSecond = DragonStruct.SecondaryColor.Green.rawValue
-//        newDragon1.dragonImageLocation =  Utilities.returnImageLocation(dragon: newDragon1)
-//        newDragon1.dragonSellingPrice = Utilities.returnSellingPrice(dragon: newDragon1)
-//        newDragon1.dragonCloningPrice = Utilities.returnCloningPrice(
-//            type: DragonStruct.DragonType(rawValue: newDragon1.dragonType!) ?? DragonStruct.DragonType.Dragon,
-//            pattern: DragonStruct.DragonPattern(rawValue: newDragon1.dragonPattern!) ?? DragonStruct.DragonPattern.Basic,
-//            color: DragonStruct.MainColor(rawValue: newDragon1.dragonMain!) ?? DragonStruct.MainColor.Black,
-//            secondColor: DragonStruct.SecondaryColor(rawValue: newDragon1.dragonSecond!) ?? DragonStruct.SecondaryColor.Black)
-//        
+        let newDragon1 = Dragon(context: viewContext)
+        newDragon1.id = Utilities.generateRandomGuid(length: 10)
+        newDragon1.dragonType =  DragonStruct.DragonType.Dragon.rawValue
+        newDragon1.dragonPattern = DragonStruct.DragonPattern.Basic.rawValue
+        newDragon1.dragonAge = DragonStruct.DragonAge.Baby.rawValue
+        newDragon1.dragonMain = DragonStruct.MainColor.Green.rawValue
+        newDragon1.dragonSecond = DragonStruct.SecondaryColor.Green.rawValue
+        newDragon1.dragonImageLocation =  Utilities.returnImageLocation(dragon: newDragon1)
+        newDragon1.dragonSellingPrice = Utilities.returnSellingPrice(dragon: newDragon1)
+        newDragon1.dragonCloningPrice = Utilities.returnCloningPrice(
+            type: DragonStruct.DragonType(rawValue: newDragon1.dragonType!) ?? DragonStruct.DragonType.Dragon,
+            pattern: DragonStruct.DragonPattern(rawValue: newDragon1.dragonPattern!) ?? DragonStruct.DragonPattern.Basic,
+            color: DragonStruct.MainColor(rawValue: newDragon1.dragonMain!) ?? DragonStruct.MainColor.Black,
+            secondColor: DragonStruct.SecondaryColor(rawValue: newDragon1.dragonSecond!) ?? DragonStruct.SecondaryColor.Black)
+        
         
         let newDragon2 = Dragon(context: viewContext)
         newDragon2.id = Utilities.generateRandomGuid(length: 10)
@@ -48,6 +49,7 @@ struct PersistenceController {
         newDragon2.dragonPattern = DragonStruct.DragonPattern.Basic.rawValue
         newDragon2.dragonMain = DragonStruct.MainColor.Brown.rawValue
         newDragon2.dragonSecond = DragonStruct.SecondaryColor.Brown.rawValue
+        newDragon2.dragonAge = DragonStruct.DragonAge.Baby.rawValue
         newDragon2.dragonImageLocation =  Utilities.returnImageLocation(dragon: newDragon2)
         newDragon2.dragonSellingPrice = Utilities.returnSellingPrice(dragon: newDragon2)
         newDragon2.dragonCloningPrice = Utilities.returnCloningPrice(
