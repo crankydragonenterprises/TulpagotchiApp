@@ -21,13 +21,28 @@ struct ContentView: View {
         animation: .default
     )
     private var dragons: FetchedResults<Dragon>
-    
-    @State var userName: String = "Bruno"
+    @State private var userName: String = ""
 
     var body: some View {
-        VStack {
-            TextField("What's your name", text: $userName)
-            
+        if(dragons.count < 2) {
+            ContentUnavailableView {
+                Label("What is your name", systemImage: "questionmark.circle")
+            } description: {
+                TextField("Enter name here", text: $userName)
+                    .textFieldStyle(.roundedBorder)        // modern style
+                    .textInputAutocapitalization(.never)   // optional customization
+                    .autocorrectionDisabled(true)
+                    .padding()
+            } actions: {
+                if !userName.isEmpty {
+                    Button ("Get your first dragons", systemImage: "lizard.fill") {
+                        saveNewUser(newUserName: userName)
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
+            }
+        }
+        else {
             NavigationView() {
                 List {
                     ForEach(user) { user in
@@ -36,17 +51,17 @@ struct ContentView: View {
                             
                             
                         } label: {
-                            Text("\(user.id ?? "Unknown ID")")
+                            Text("Go to \(user.id!)'s Dashboard")
                         }
                     }
                 }
                 .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        EditButton()
-                    }
+//                    ToolbarItem(placement: .navigationBarTrailing) {
+//                        EditButton()
+//                    }
                     ToolbarItem {
                         Button("Add Item", systemImage: "plus") {
-                            saveUser()
+                            saveNewUser(newUserName: userName)
                         }
                     }
                 }
@@ -54,9 +69,10 @@ struct ContentView: View {
         }
     }
     
-    func saveUser() {
+    func saveNewUser(newUserName: String) {
+        
         let newUser = User(context: viewContext)
-        newUser.id = userName
+        newUser.id = newUserName
         newUser.level = 1
         newUser.levelFloor = 0
         newUser.levelCeiling = 500
@@ -104,10 +120,10 @@ struct UserAndDragonView: View {
     
     var body: some View {
         VStack {
-            Text(user.id ?? "Unknown User")
+            Text("User ID: \(user.id ?? "Unknown User")")
             
             ForEach(dragons) {dragon in
-                Text("\(dragon.id ?? "Unknown Dragon")")
+                Text("Dragon ID: \(dragon.id ?? "Unknown Dragon")")
             }
         }
     }
