@@ -26,7 +26,7 @@ struct ContentView: View {
     private let randomDragon: DragonStruct = DragonStruct.returnRandomDragon(age: DragonStruct.DragonAge.Baby)
 
     var body: some View {
-        if(dragons.count == 0) {
+        if(dragons.count == 0 && user.count == 0) {
             GeometryReader { geo in
                 ZStack {
                     Image(.rainbow1)
@@ -91,6 +91,7 @@ struct ContentView: View {
         newDragon1.dragonPattern = DragonStruct.DragonPattern.Basic.rawValue
         newDragon1.dragonMain = DragonStruct.MainColor.Green.rawValue
         newDragon1.dragonSecond = DragonStruct.SecondaryColor.Green.rawValue
+        newDragon1.dragonAge = DragonStruct.DragonAge.Adult.rawValue
         newDragon1.dragonImageLocation =  Utilities.returnImageLocation(dragon: newDragon1)
         newDragon1.dragonSellingPrice = Utilities.returnSellingPrice(dragon: newDragon1)
         newDragon1.dragonCloningPrice = Utilities.returnCloningPrice(type: DragonStruct.DragonType(rawValue: newDragon1.dragonType!) ?? DragonStruct.DragonType.Dragon, pattern: DragonStruct.DragonPattern(rawValue: newDragon1.dragonPattern!) ?? DragonStruct.DragonPattern.Basic, color: DragonStruct.MainColor(rawValue: newDragon1.dragonMain!) ?? DragonStruct.MainColor.Black, secondColor: DragonStruct.SecondaryColor(rawValue: newDragon1.dragonSecond!) ?? DragonStruct.SecondaryColor.Black)
@@ -102,8 +103,9 @@ struct ContentView: View {
         newDragon2.dragonPattern = DragonStruct.DragonPattern.Basic.rawValue
         newDragon2.dragonMain = DragonStruct.MainColor.Brown.rawValue
         newDragon2.dragonSecond = DragonStruct.SecondaryColor.Brown.rawValue
-        newDragon2.dragonImageLocation =  Utilities.returnImageLocation(dragon: newDragon1)
-        newDragon2.dragonSellingPrice = Utilities.returnSellingPrice(dragon: newDragon1)
+        newDragon2.dragonAge = DragonStruct.DragonAge.Adult.rawValue
+        newDragon2.dragonImageLocation =  Utilities.returnImageLocation(dragon: newDragon2)
+        newDragon2.dragonSellingPrice = Utilities.returnSellingPrice(dragon: newDragon2)
         newDragon2.dragonCloningPrice = Utilities.returnCloningPrice(type: DragonStruct.DragonType(rawValue: newDragon2.dragonType!) ?? DragonStruct.DragonType.Dragon, pattern: DragonStruct.DragonPattern(rawValue: newDragon2.dragonPattern!) ?? DragonStruct.DragonPattern.Basic, color: DragonStruct.MainColor(rawValue: newDragon2.dragonMain!) ?? DragonStruct.MainColor.Black, secondColor: DragonStruct.SecondaryColor(rawValue: newDragon2.dragonSecond!) ?? DragonStruct.SecondaryColor.Black)
         
         do {

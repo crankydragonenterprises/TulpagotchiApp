@@ -19,7 +19,7 @@ struct GrowDragonView: View {
             GrowAdultView()
         }
         else {
-            Text("Your dragon is somehow not an age")
+            Text(dragon.prettyName)
         }
             
     }
@@ -28,6 +28,6 @@ struct GrowDragonView: View {
 #Preview {
     NavigationStack {
         GrowDragonView()
-            .environmentObject(PersistenceController.previewBabyDragon)
+            .environmentObject(PersistenceController.previewDragon)
     }
 }

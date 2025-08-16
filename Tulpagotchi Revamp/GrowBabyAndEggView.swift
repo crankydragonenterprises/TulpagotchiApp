@@ -18,7 +18,7 @@ struct GrowBabyAndEggView: View {
             ZStack {
                 Image(.rainbow3)
                     .resizable()
-                    .frame(width: geo.size.width * 1, height: geo.size.height * 1.125)
+                    .scaledToFill()
                     .ignoresSafeArea()
                     .opacity(0.6)
                 
@@ -69,7 +69,10 @@ struct GrowBabyAndEggView: View {
                     }
                 }
                 .padding()
+                .frame(width: geo.size.width, height: geo.size.height)
+                
             }
+            .frame(width: geo.size.width, height: geo.size.height)
         }
     }
 }
@@ -77,6 +80,6 @@ struct GrowBabyAndEggView: View {
 #Preview {
     NavigationStack {
         GrowBabyAndEggView()
-            .environmentObject(PersistenceController.previewBabyDragon)
+            .environmentObject(PersistenceController.previewDragon)
     }
 }

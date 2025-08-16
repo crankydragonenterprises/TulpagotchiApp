@@ -10,7 +10,7 @@ import CoreData
 struct PersistenceController {
     static let shared = PersistenceController()
 
-    static var previewBabyDragon: Dragon {
+    static var previewDragon: Dragon {
         let context = PersistenceController.preview.container.viewContext
         
         let fetchRequest: NSFetchRequest<Dragon> = Dragon.fetchRequest()
@@ -19,6 +19,16 @@ struct PersistenceController {
         let results = try! context.fetch(fetchRequest)
         
         return results.first!
+    }
+    
+    static var allDragons: [Dragon] {
+        let context = PersistenceController.shared.container.viewContext
+        
+        let fetchRequest: NSFetchRequest<Dragon> = Dragon.fetchRequest()
+        
+        let results = try! context.fetch(fetchRequest)
+        
+        return results
     }
     
     static let preview: PersistenceController = {
@@ -67,6 +77,21 @@ struct PersistenceController {
             pattern: DragonStruct.DragonPattern(rawValue: newDragon2.dragonPattern!) ?? DragonStruct.DragonPattern.Basic,
             color: DragonStruct.MainColor(rawValue: newDragon2.dragonMain!) ?? DragonStruct.MainColor.Black,
             secondColor: DragonStruct.SecondaryColor(rawValue: newDragon2.dragonSecond!) ?? DragonStruct.SecondaryColor.Black)
+        
+        let newDragon3 = Dragon(context: viewContext)
+        newDragon3.id = Utilities.generateRandomGuid(length: 10)
+        newDragon3.dragonType =  DragonStruct.DragonType.Dragon.rawValue
+        newDragon3.dragonPattern = DragonStruct.DragonPattern.Basic.rawValue
+        newDragon3.dragonMain = DragonStruct.MainColor.Brown.rawValue
+        newDragon3.dragonSecond = DragonStruct.SecondaryColor.Brown.rawValue
+        newDragon3.dragonAge = DragonStruct.DragonAge.Adult.rawValue
+        newDragon3.dragonImageLocation =  Utilities.returnImageLocation(dragon: newDragon3)
+        newDragon3.dragonSellingPrice = Utilities.returnSellingPrice(dragon: newDragon3)
+        newDragon3.dragonCloningPrice = Utilities.returnCloningPrice(
+            type: DragonStruct.DragonType(rawValue: newDragon3.dragonType!) ?? DragonStruct.DragonType.Dragon,
+            pattern: DragonStruct.DragonPattern(rawValue: newDragon3.dragonPattern!) ?? DragonStruct.DragonPattern.Basic,
+            color: DragonStruct.MainColor(rawValue: newDragon3.dragonMain!) ?? DragonStruct.MainColor.Black,
+            secondColor: DragonStruct.SecondaryColor(rawValue: newDragon3.dragonSecond!) ?? DragonStruct.SecondaryColor.Black)
         
         do {
             try viewContext.save()

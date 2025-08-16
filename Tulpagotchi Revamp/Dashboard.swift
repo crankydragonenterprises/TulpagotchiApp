@@ -155,6 +155,7 @@ struct Dashboard: View {
                                 ForEach(dragons) { dragon in
                                     NavigationLink {
                                         GrowDragonView()
+                                            .environmentObject(dragon)
                                         //Text( dragon.dragonMain ?? "No Dragon" )
                                     } label: {
                                         AsyncImage(url: dragon.dragonImageLocation) { image in
@@ -176,8 +177,12 @@ struct Dashboard: View {
                 }
                 .padding()
             }
+            
         }
+        
+
     }
+
     
     struct DashboardProgressView: View {
         let title: String
