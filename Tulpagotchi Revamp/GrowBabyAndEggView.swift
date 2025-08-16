@@ -56,8 +56,8 @@ struct GrowBabyAndEggView: View {
                         
                         NavigationLink() {
                             //Load the Writing Page
-                            //WritingPage(dragons: [dragonToGrow], wordCountGoal: wordsToGrow)
-                            Text("Writing Page")
+                            WritingPage(dragons: [dragon], wordCountGoal: wordsToGrow)
+                            //Text("Writing Page")
                         } label: {
                             Text("Grow for \(wordsToGrow) words")
                             

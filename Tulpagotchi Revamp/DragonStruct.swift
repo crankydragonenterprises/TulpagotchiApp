@@ -102,6 +102,44 @@ struct DragonStruct : Identifiable, Codable {
         
     }
     
+    static func returnDragonStructFromCoreDataDragon(coreDataDragon: Dragon) -> DragonStruct
+    {
+        var dragon = DragonStruct(
+            dragonType: DragonStruct.DragonType(rawValue: coreDataDragon.dragonType!) ?? .Dragon,
+            dragonPattern: DragonStruct.DragonPattern(rawValue: coreDataDragon.dragonPattern!) ?? .Basic,
+            dragonMain: DragonStruct.MainColor(rawValue: coreDataDragon.dragonMain!) ?? .White,
+            dragonSecond: DragonStruct.SecondaryColor(rawValue: coreDataDragon.dragonSecond!) ?? .White,
+            dragonAge: DragonStruct.DragonAge(rawValue: coreDataDragon.dragonAge!) ?? .Adult,
+            dragonSellingPrice: 0,
+            dragonImageLocation: URL(string: "https://www.google.com/images")!,
+            id: Utilities.generateRandomGuid(length: 10),
+        )
+        
+        let imageURL = returnImageLocation(dragon: dragon)
+        dragon.dragonImageLocation = imageURL
+        dragon.dragonSellingPrice = returnSellingPrice(dragon: dragon)
+        
+        return dragon
+    }
+    
+    static func returnCoreDataDragonFromDragonStruct(dragon: DragonStruct) -> Dragon
+    {
+        let coreDataDragon = Dragon(
+            context: PersistenceController.shared.container.viewContext
+        )
+        coreDataDragon.id = dragon.id
+        coreDataDragon.dragonType =  dragon.dragonType.rawValue
+        coreDataDragon.dragonPattern = dragon.dragonPattern.rawValue
+        coreDataDragon.dragonMain = dragon.dragonMain.rawValue
+        coreDataDragon.dragonSecond = dragon.dragonSecond.rawValue
+        coreDataDragon.dragonAge = dragon.dragonAge.rawValue
+        coreDataDragon.dragonImageLocation =  Utilities.returnImageLocation(dragon: coreDataDragon)
+        coreDataDragon.dragonSellingPrice = Utilities.returnSellingPrice(dragon: coreDataDragon)
+        coreDataDragon.dragonCloningPrice = Utilities.returnCloningPrice(type: DragonStruct.DragonType(rawValue: coreDataDragon.dragonType!) ?? DragonStruct.DragonType.Dragon, pattern: DragonStruct.DragonPattern(rawValue: coreDataDragon.dragonPattern!) ?? DragonStruct.DragonPattern.Basic, color: DragonStruct.MainColor(rawValue: coreDataDragon.dragonMain!) ?? DragonStruct.MainColor.Black, secondColor: DragonStruct.SecondaryColor(rawValue: coreDataDragon.dragonSecond!) ?? DragonStruct.SecondaryColor.Black)
+        
+        return coreDataDragon
+    }
+    
     //return the price to clone a dragon
     static func returnCloningPrice(type: DragonType, pattern: DragonPattern, color: MainColor, secondColor: SecondaryColor) -> Int {
         var cloningPrice = 0

@@ -47,11 +47,19 @@ struct Dashboard: View {
     
     //progress
     var progressLevel: Double {
-        return (Double(user[0].level) / (Double(user[0].levelCeiling) - Double(user[0].levelFloor)))
+        guard let u = user.first else { return 0 } // no user yet
+        let denom = Double(u.levelCeiling) - Double(u.levelFloor)
+        guard denom > 0 else { return 0 }
+        return Double(u.level) / denom
     }
-    var dailyProgressPercentage : Double {
-        return (Double(user[0].dailyProgress) / Double(user[0].dailyGoal))
+    
+    var dailyProgressPercentage: Double {
+        guard let u = user.first else { return 0 }
+        let goal = Double(u.dailyGoal)
+        guard goal > 0 else { return 0 }
+        return Double(u.dailyProgress) / goal
     }
+
     
     //Filters
     @State var selectedType: String = "All"

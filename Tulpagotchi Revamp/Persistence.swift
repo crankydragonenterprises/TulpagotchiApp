@@ -35,6 +35,11 @@ struct PersistenceController {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
         
+        let newProject = Project(context: viewContext)
+        newProject.id = 1
+        newProject.name = "Test Project"
+        newProject.totalWords = 50
+        
         let newUser = User(context: viewContext)
         newUser.id = "Test User"
         newUser.level = 1
