@@ -84,6 +84,8 @@ struct ContentView: View {
         newUser.dailyGoal = 200
         newUser.dailyProgress = 0
         newUser.coins = 0
+        newUser.highestTypeAllowed = "Dragon"
+        newUser.highestPatternAllowed = "Basic"
         
         let newDragon1 = Dragon(context: viewContext)
         newDragon1.id = Utilities.generateRandomGuid(length: 10)
@@ -111,7 +113,7 @@ struct ContentView: View {
         do {
             try viewContext.save()
         } catch {
-            
+            print(error)
         }
     }
 }

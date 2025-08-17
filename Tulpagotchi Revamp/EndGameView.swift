@@ -12,11 +12,12 @@ struct EndGameView: View {
     
     let finalWordCount: Int
     let finalMinuteCount: Double
+    let numberOfEggs: Int
     
     var body: some View {
         GeometryReader { geo in
             ZStack {
-                Image(.rainbow5)
+                Image(.rainbow4)
                     .resizable()
                     .opacity(0.5)
                     .scaledToFill()
@@ -27,10 +28,24 @@ struct EndGameView: View {
                         .font(.largeTitle)
                         .fontWeight(.bold)
                         .padding()
-                    Text("You wrote \(finalWordCount) words in \(String(format: "%.2f", finalMinuteCount)) minutes and earned 1 egg! Good job!")
+                    Text("You wrote \(finalWordCount) words in \(String(format: "%.2f", finalMinuteCount)) minutes! Good job!")
                         .font(.title)
+                        .fontWeight(.bold)
                         .padding()
                         .multilineTextAlignment(.center)
+                    if numberOfEggs > 0 {
+                        Text("You earned \(numberOfEggs) egg")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .padding()
+                            .multilineTextAlignment(.center)
+                    } else {
+                        Text("You grew your dragon!")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .padding()
+                            .multilineTextAlignment(.center)
+                    }
                     Spacer()
                     NavigationLink() {
                         Dashboard()
@@ -54,6 +69,6 @@ struct EndGameView: View {
 
 #Preview {
     NavigationStack {
-        EndGameView(finalWordCount: 100, finalMinuteCount: 10).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        EndGameView(finalWordCount: 100, finalMinuteCount: 10, numberOfEggs: 1).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }

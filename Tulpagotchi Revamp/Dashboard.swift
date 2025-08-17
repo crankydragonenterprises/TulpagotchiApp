@@ -187,8 +187,7 @@ struct Dashboard: View {
             }
             
         }
-        
-
+        .navigationBarBackButtonHidden(true)
     }
     
     struct DashboardProgressView: View {

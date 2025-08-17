@@ -12,10 +12,18 @@ struct WritingPage: View {
     
     @Environment(\.managedObjectContext) private var viewContext
     
+    
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \User.id, ascending: true)],
+        animation: .default) private var users: FetchedResults<User>
+    
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Project.id, ascending: true)],
-        animation: .default)
-    private var projects: FetchedResults<Project>
+        animation: .default) private var projects: FetchedResults<Project>
+    
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \Entry.id, ascending: true)],
+        animation: .default) private var entries: FetchedResults<Entry>
     
     
     @Environment(\.colorScheme) private var scheme   // <-- name it 'scheme' to avoid collisions
@@ -50,6 +58,9 @@ struct WritingPage: View {
     @State private var showCancelAlert = false
     @State private var goToDashboard = false
     @State private var showEndGamePage = false
+    
+    //need a variable to track the number of eggs the user has gained
+    @State var eggsGained: Int = 0
     
     var body: some View {
         ZStack {
@@ -165,6 +176,7 @@ struct WritingPage: View {
 //                    .padding()
                 
                 Button {
+                    eggsGained = returnNumberOfEggs()
                     showEndGamePage = true
                     endGame()
                 } label: {
@@ -177,7 +189,7 @@ struct WritingPage: View {
                 .clipShape(.capsule)
                 .navigationTitle("")
                 .navigationDestination (isPresented: $showEndGamePage) {
-                    EndGameView(finalWordCount: wordCount, finalMinuteCount: timeElapsed)
+                    EndGameView(finalWordCount: wordCount, finalMinuteCount: timeElapsed, numberOfEggs: eggsGained)
                         .environment(\.managedObjectContext, viewContext)
                 }
             }
@@ -198,8 +210,164 @@ struct WritingPage: View {
         
     }
     
+    func returnNumberOfEggs() -> Int {
+        var numberOfEggs: Int
+        if dragons[0].dragonAge == "Adult" { numberOfEggs = 1}
+        else if dragons[0].dragonAge == "Baby" { numberOfEggs = 0 }
+        else if dragons[0].dragonAge == "Egg" { numberOfEggs = 0 }
+        else { numberOfEggs = 0 }
+        
+        print(dragons[0].prettyName)
+        print(numberOfEggs)
+        
+        return numberOfEggs
+    }
+    
     func endGame() {
-        //TO DO
+        var hasValidProject = false
+        var projectToSave: Project?
+        var projectID: Int16?
+        
+        //Check if a project exists with the projectTitle
+        for project in projects
+        {
+            if project.name == self.projectTitle {
+                hasValidProject = true
+                projectToSave = project
+                projectID = project.id
+            }
+        }
+        
+        //if so, update the project
+        if hasValidProject {
+            projectToSave?.totalWords += Int64(wordCount)
+        }
+        else
+        {
+            //if not, make a new project
+            projectToSave = Project(context: viewContext)
+            projectToSave?.id = Int16(projects.count + 1)
+            projectToSave?.name = projectTitle
+            projectToSave?.totalWords = Int64(wordCount)
+            
+            projectID = Int16(projects.count + 1)
+        }
+        
+        //Save the text in an entry
+        let entry = Entry(context: viewContext)
+        entry.text = projectText
+        entry.id = Int64(entries.count + 1)
+        entry.projectID = projectID ?? 1
+        
+        //Update the user in the level progress and check for level upgrades
+        let user = users[0]
+        user.currentLevel += Int64(wordCount)
+        // check if the current level is above the level ceiling
+        if user.currentLevel >= user.levelCeiling {
+            user.level += 1
+            user.levelFloor = user.levelCeiling
+            user.levelCeiling = Int64(getNewLevelCeiling(level: Int(user.level)))
+            
+            //check for achievements
+            if user.level > 4 {
+                user.highestPatternAllowed = "Striped"
+            }
+            if user.level > 9 {
+                user.highestPatternAllowed = "Mottled"
+            }
+            if user.level > 14 {
+                user.highestTypeAllowed = "Gryphon"
+            }
+            if user.level > 24 {
+                user.highestTypeAllowed = "Phoenix"
+            }
+            if user.level > 34 {
+                user.highestTypeAllowed = "Kraken"
+            }
+            if user.level > 44 {
+                user.highestTypeAllowed = "Cthulhu"
+            }
+        }
+        
+        let dragon = dragons[0]
+        //TO DO - if the dragon is an adult, add an egg to the dragons
+        if dragon.dragonAge == "Adult" {
+            //create a new dragon of age baby with mixed characteristics
+            let motherDragon = dragons[0]
+            let fatherDragon = dragons[1]
+            
+            let newDragon = Dragon(context: viewContext)
+            newDragon.id = Utilities.generateRandomGuid(length: 10)
+            newDragon.dragonAge = "Egg"
+            
+            var randomNumber = Int.random(in: 0...1)
+            var babysType: String
+            if randomNumber == 0 {
+                babysType = motherDragon.dragonType ?? "Dragon"
+            } else { babysType = fatherDragon.dragonType ?? "Dragon" }
+            newDragon.dragonType = babysType
+            
+            randomNumber = Int.random(in: 0...1)
+            var babysPattern: String
+            if randomNumber == 0 {
+                babysPattern = motherDragon.dragonPattern ?? "Basic"
+            } else { babysPattern = fatherDragon.dragonPattern ?? "Basic" }
+            newDragon.dragonPattern = babysPattern
+            
+            randomNumber = Int.random(in: 0...1)
+            var babysMain: String
+            if randomNumber == 0 {
+                babysMain = motherDragon.dragonMain ?? "Black"
+            } else { babysMain = fatherDragon.dragonMain ?? "Black" }
+            newDragon.dragonMain = babysMain
+            
+            randomNumber = Int.random(in: 0...1)
+            var babysSecondary: String
+            if randomNumber == 0 {
+                babysSecondary = motherDragon.dragonSecond ?? "Black"
+            } else { babysSecondary = fatherDragon.dragonSecond ?? "Black" }
+            newDragon.dragonSecond = babysSecondary
+            
+            //selling and cloning prices
+            newDragon.dragonSellingPrice = Utilities.returnSellingPrice(dragon: newDragon)
+            
+            let newDragonStruct = DragonStruct.returnDragonStructFromCoreDataDragon(coreDataDragon: newDragon)
+            newDragon.dragonCloningPrice = Utilities.returnCloningPrice(type: newDragonStruct.dragonType, pattern: newDragonStruct.dragonPattern, color: newDragonStruct.dragonMain, secondColor: newDragonStruct.dragonSecond)
+            
+            newDragon.dragonImageLocation = Utilities.returnImageLocation(dragon: newDragon)
+            
+            print(newDragon.prettyName)
+        }
+        
+        //if the dragon is a baby, update it to be an adult
+        if dragon.dragonAge == "Baby" {
+            dragon.dragonAge = "Adult"
+            dragon.dragonImageLocation = Utilities.returnImageLocation(dragon: dragon)
+            dragon.dragonSellingPrice = Utilities.returnSellingPrice(dragon: dragon)
+        }
+        
+        //if the dragon is an egg, update it to be a baby
+        if dragon.dragonAge == "Egg" {
+            dragon.dragonAge = "Baby"
+            dragon.dragonImageLocation = Utilities.returnImageLocation(dragon: dragon)
+            dragon.dragonSellingPrice = Utilities.returnSellingPrice(dragon: dragon)
+        }
+        
+        do {
+            try viewContext.save()
+        } catch {
+            print(error)
+        }
+    }
+    
+    func getNewLevelCeiling(level: Int) -> Int{
+        let constant = 1000
+        
+        var newLevelCeiling: Float {
+            Float(level * constant) * Float(level).squareRoot()
+        }
+        
+        return Int(newLevelCeiling)
     }
     
     func wordCount(in text: String) -> Int {
@@ -221,7 +389,8 @@ struct WritingPage: View {
 }
 
 #Preview {
-    let dragons: [Dragon] = [DragonStruct.returnCoreDataDragonFromDragonStruct(dragon:DragonStruct.returnRandomDragon(age: .Adult)), DragonStruct.returnCoreDataDragonFromDragonStruct(dragon:DragonStruct.returnRandomDragon(age: .Adult))]
+    let dragons: [Dragon] = [DragonStruct.returnCoreDataDragonFromDragonStruct(dragon:DragonStruct.returnRandomDragon(age: .Baby)), //DragonStruct.returnCoreDataDragonFromDragonStruct(dragon:DragonStruct.returnRandomDragon(age: .Adult))
+    ]
     
     NavigationStack {
         WritingPage(dragons: dragons, wordCountGoal: 10).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
