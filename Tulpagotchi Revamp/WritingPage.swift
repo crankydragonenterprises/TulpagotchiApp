@@ -59,8 +59,9 @@ struct WritingPage: View {
     @State private var goToDashboard = false
     @State private var showEndGamePage = false
     
-    //need a variable to track the number of eggs the user has gained
+    //need a variable to track the number of eggs & coins the user has gained
     @State var eggsGained: Int = 0
+    @State var coinsGained: Int = 0
     
     var body: some View {
         ZStack {
@@ -177,6 +178,7 @@ struct WritingPage: View {
                 
                 Button {
                     eggsGained = returnNumberOfEggs()
+                    coinsGained = returnCoinsEarned()
                     showEndGamePage = true
                     endGame()
                 } label: {
@@ -189,7 +191,7 @@ struct WritingPage: View {
                 .clipShape(.capsule)
                 .navigationTitle("")
                 .navigationDestination (isPresented: $showEndGamePage) {
-                    EndGameView(finalWordCount: wordCount, finalMinuteCount: timeElapsed, numberOfEggs: eggsGained)
+                    EndGameView(finalWordCount: wordCount, finalMinuteCount: timeElapsed, numberOfEggs: eggsGained, numberOfCoins: coinsGained)
                         .environment(\.managedObjectContext, viewContext)
                 }
             }
@@ -217,10 +219,18 @@ struct WritingPage: View {
         else if dragons[0].dragonAge == "Egg" { numberOfEggs = 0 }
         else { numberOfEggs = 0 }
         
-        print(dragons[0].prettyName)
-        print(numberOfEggs)
+        //print(dragons[0].prettyName)
+        //print(numberOfEggs)
         
         return numberOfEggs
+    }
+    
+    func returnCoinsEarned() -> Int {
+        var coinsEarned: Int
+        
+        coinsEarned = wordCount / 10
+        
+        return coinsEarned
     }
     
     func endGame() {
@@ -261,6 +271,7 @@ struct WritingPage: View {
         
         //Update the user in the level progress and check for level upgrades
         let user = users[0]
+        user.coins += Int64(coinsGained)
         user.currentLevel += Int64(wordCount)
         // check if the current level is above the level ceiling
         if user.currentLevel >= user.levelCeiling {

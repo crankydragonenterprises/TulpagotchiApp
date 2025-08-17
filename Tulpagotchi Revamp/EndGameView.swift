@@ -13,6 +13,7 @@ struct EndGameView: View {
     let finalWordCount: Int
     let finalMinuteCount: Double
     let numberOfEggs: Int
+    let numberOfCoins: Int
     
     var body: some View {
         GeometryReader { geo in
@@ -34,13 +35,13 @@ struct EndGameView: View {
                         .padding()
                         .multilineTextAlignment(.center)
                     if numberOfEggs > 0 {
-                        Text("You earned \(numberOfEggs) egg")
+                        Text("You earned \(numberOfEggs) egg and \(numberOfCoins) coins!")
                             .font(.title)
                             .fontWeight(.bold)
                             .padding()
                             .multilineTextAlignment(.center)
                     } else {
-                        Text("You grew your dragon!")
+                        Text("You grew your dragon and earned \(numberOfCoins) coins!")
                             .font(.title)
                             .fontWeight(.bold)
                             .padding()
@@ -69,6 +70,6 @@ struct EndGameView: View {
 
 #Preview {
     NavigationStack {
-        EndGameView(finalWordCount: 100, finalMinuteCount: 10, numberOfEggs: 1).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        EndGameView(finalWordCount: 100, finalMinuteCount: 10, numberOfEggs: 1, numberOfCoins: 10).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }
