@@ -84,7 +84,7 @@ struct GrowAdultView: View {
                         NavigationLink {
                             //match the dragon
                             if selectedMate != nil {
-                                //WritingPage(dragons: [dragonToMatch, chosenDragonMate!], wordCountGoal: 300)
+                                WritingPage(dragons: [dragon, selectedMate!], wordCountGoal: 300)
                             }
                         } label : {
                             Text("Match for 300 words")

@@ -132,6 +132,7 @@ struct PersistenceController {
                 print(error)
             }
         })
+        container.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyStoreTrump
         container.viewContext.automaticallyMergesChangesFromParent = true
     }
 }

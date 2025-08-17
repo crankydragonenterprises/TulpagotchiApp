@@ -44,9 +44,12 @@ struct WritingPage: View {
     
     var gameComplete: Bool { return wordCount >= wordCountGoal }
     
+    private var hasValidGoal: Bool { wordCountGoal > 0 }
+    
     //provide a way to cancel the game
     @State private var showCancelAlert = false
     @State private var goToDashboard = false
+    @State private var showEndGamePage = false
     
     var body: some View {
         ZStack {
@@ -62,7 +65,7 @@ struct WritingPage: View {
                         showCancelAlert = true
                     }
                     .padding()
-                    .background(.red)
+                    .background(.gray)
                     .foregroundStyle(.white)
                     .clipShape(.capsule)
                     .alert("Cancel?",
@@ -72,9 +75,7 @@ struct WritingPage: View {
                             stopTimer()
                             goToDashboard = true
                         }
-                        Button("No", role: .cancel) {
-                            // Do nothing — alert dismisses
-                        }
+                        Button("No", role: .cancel) {}
                     } message: {
                         Text("Are you sure you want to quit? Your progress will be lost.")
                     }
@@ -82,7 +83,7 @@ struct WritingPage: View {
                 }
                 .padding(.trailing)
                 .navigationDestination(isPresented: $goToDashboard) {
-                    Dashboard()
+                    Dashboard().environment(\.managedObjectContext, viewContext)
                 }
                 
                 HStack {
@@ -145,24 +146,40 @@ struct WritingPage: View {
                     .focused($isProjectTextFocused)
                 
                 Spacer()
-                //Progress Bar
-                ProgressView(value: wordCountProgress)
+                if hasValidGoal {
+                    ProgressView(
+                        value: Double(wordCount),
+                        total: Double(wordCountGoal)
+                    )
                     .scaleEffect(y:6)
                     .tint(.green)
                     .padding()
+                } else {
+                    // Goal not ready yet? Show indeterminate until it is.
+                    ProgressView()
+                }
+//                //Progress Bar
+//                ProgressView(value: wordCountProgress)
+//                    .scaleEffect(y:6)
+//                    .tint(.green)
+//                    .padding()
                 
-                NavigationLink {
-                    //end the game
-                    EndGame(finalWordCount: wordCount, finalMinuteCount: timeElapsed)
-                } label : {
+                Button {
+                    showEndGamePage = true
+                    endGame()
+                } label: {
                     Text(gameComplete ? "End your game" : "Keep Writing!")
-                    
                 }
                 .padding()
                 .background(gameComplete ? .green.opacity(1) : .gray.opacity(0.5))
                 .foregroundStyle(.white)
                 .disabled(!gameComplete)
                 .clipShape(.capsule)
+                .navigationTitle("")
+                .navigationDestination (isPresented: $showEndGamePage) {
+                    EndGameView(finalWordCount: wordCount, finalMinuteCount: timeElapsed)
+                        .environment(\.managedObjectContext, viewContext)
+                }
             }
             .padding()
         }
@@ -179,6 +196,10 @@ struct WritingPage: View {
         }
         .onDisappear { stopTimer() }
         
+    }
+    
+    func endGame() {
+        //TO DO
     }
     
     func wordCount(in text: String) -> Int {
@@ -203,7 +224,7 @@ struct WritingPage: View {
     let dragons: [Dragon] = [DragonStruct.returnCoreDataDragonFromDragonStruct(dragon:DragonStruct.returnRandomDragon(age: .Adult)), DragonStruct.returnCoreDataDragonFromDragonStruct(dragon:DragonStruct.returnRandomDragon(age: .Adult))]
     
     NavigationStack {
-        WritingPage(dragons: dragons, wordCountGoal: 300).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        WritingPage(dragons: dragons, wordCountGoal: 10).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
         
     }
 }

@@ -190,7 +190,6 @@ struct Dashboard: View {
         
 
     }
-
     
     struct DashboardProgressView: View {
         let title: String
