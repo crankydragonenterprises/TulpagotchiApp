@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Foundation
+import CoreData
 
 struct DragonStruct : Identifiable, Codable {
     var id: String?
@@ -122,11 +123,14 @@ struct DragonStruct : Identifiable, Codable {
         return dragon
     }
     
-    static func returnCoreDataDragonFromDragonStruct(dragon: DragonStruct) -> Dragon
+    static func returnCoreDataDragonFromDragonStruct(dragon: DragonStruct, in context: NSManagedObjectContext) -> Dragon
     {
-        let coreDataDragon = Dragon(
-            context: PersistenceController.shared.container.viewContext
-        )
+        let entity = NSEntityDescription.entity(forEntityName: "Dragon", in: context)!
+        let coreDataDragon = Dragon(entity: entity, insertInto: nil)
+        
+//        let coreDataDragon = Dragon(
+//            context: PersistenceController.shared.container.viewContext
+//        )
         coreDataDragon.id = dragon.id
         coreDataDragon.dragonType =  dragon.dragonType.rawValue
         coreDataDragon.dragonPattern = dragon.dragonPattern.rawValue

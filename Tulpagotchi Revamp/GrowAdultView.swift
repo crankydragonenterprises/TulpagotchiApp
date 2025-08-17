@@ -14,11 +14,16 @@ struct GrowAdultView: View {
     @EnvironmentObject private var dragon: Dragon
     
     //pull all the other dragons
-    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Dragon.id, ascending: true)]
-    ) private var potentialMates: FetchedResults<Dragon>
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Dragon.id, ascending: true)]) private var potentialMates: FetchedResults<Dragon>
     
     @State private var mateChosen = false
     @State private var selectedMate: Dragon? = nil
+    
+    
+    @State private var randomDragon: Dragon = DragonStruct.returnCoreDataDragonFromDragonStruct(dragon: DragonStruct.returnRandomDragon(age: .Adult), in: PersistenceController.shared.container.viewContext)
+    
+    
+    @State private var showWritingPage = false
     
     var body: some View {
         GeometryReader { geo in
@@ -107,9 +112,11 @@ struct GrowAdultView: View {
                     }
                     .padding()
                     
-                    NavigationLink {
+                    Button {
+                        showWritingPage = true
+                        
                         //Match with a random dragon
-                        //WritingPage(dragons: [dragonToMatch, Dragon.returnRandomDragon(age: .Adult)], wordCountGoal: 300)
+                        
                     } label : {
                         Text("Match Random Dragon")
                     }
@@ -117,6 +124,11 @@ struct GrowAdultView: View {
                     .background(.orange)
                     .foregroundStyle(.black)
                     .clipShape(.rect(cornerRadius: 10))
+                    .navigationDestination(isPresented: $showWritingPage) {
+                        WritingPage(dragons: [dragon, randomDragon],
+                                    wordCountGoal: 300)
+                        
+                    }
                 }
                 .frame(width: geo.size.width, height: geo.size.height)
             }

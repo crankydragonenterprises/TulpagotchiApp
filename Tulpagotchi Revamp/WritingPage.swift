@@ -400,7 +400,7 @@ struct WritingPage: View {
 }
 
 #Preview {
-    let dragons: [Dragon] = [DragonStruct.returnCoreDataDragonFromDragonStruct(dragon:DragonStruct.returnRandomDragon(age: .Baby)), //DragonStruct.returnCoreDataDragonFromDragonStruct(dragon:DragonStruct.returnRandomDragon(age: .Adult))
+    let dragons: [Dragon] = [DragonStruct.returnCoreDataDragonFromDragonStruct(dragon:DragonStruct.returnRandomDragon(age: .Baby), in: PersistenceController.shared.container.viewContext), //DragonStruct.returnCoreDataDragonFromDragonStruct(dragon:DragonStruct.returnRandomDragon(age: .Adult))
     ]
     
     NavigationStack {

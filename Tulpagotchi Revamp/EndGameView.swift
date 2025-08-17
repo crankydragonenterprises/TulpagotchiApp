@@ -29,23 +29,11 @@ struct EndGameView: View {
                         .font(.largeTitle)
                         .fontWeight(.bold)
                         .padding()
-                    Text("You wrote \(finalWordCount) words in \(String(format: "%.2f", finalMinuteCount)) minutes! Good job!")
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .padding()
-                        .multilineTextAlignment(.center)
+                    TextEntry(text: "You wrote \(finalWordCount) words in \(String(format: "%.2f", finalMinuteCount)) minutes! Good job!")
                     if numberOfEggs > 0 {
-                        Text("You earned \(numberOfEggs) egg and \(numberOfCoins) coins!")
-                            .font(.title)
-                            .fontWeight(.bold)
-                            .padding()
-                            .multilineTextAlignment(.center)
+                        TextEntry(text: "You earned \(numberOfEggs) egg and \(numberOfCoins) coins!")
                     } else {
-                        Text("You grew your dragon and earned \(numberOfCoins) coins!")
-                            .font(.title)
-                            .fontWeight(.bold)
-                            .padding()
-                            .multilineTextAlignment(.center)
+                        TextEntry(text: "You grew your dragon and earned \(numberOfCoins) coins!")
                     }
                     Spacer()
                     NavigationLink() {
@@ -71,5 +59,17 @@ struct EndGameView: View {
 #Preview {
     NavigationStack {
         EndGameView(finalWordCount: 100, finalMinuteCount: 10, numberOfEggs: 1, numberOfCoins: 10).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+    }
+}
+
+struct TextEntry: View {
+    let text: String
+    
+    var body: some View {
+        Text(text)
+            .font(.title)
+            .fontWeight(.bold)
+            .padding()
+            .multilineTextAlignment(.center)
     }
 }
