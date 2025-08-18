@@ -58,8 +58,9 @@ struct ViewDragonColorDetail: View {
                                                 type: type,
                                                 pattern: pattern,
                                                 color: color,
-                                                showCloneButton: dragonPresentInDragondex(type: type, pattern: pattern, color: color, secondColor: secondColor.rawValue),
-                                                string: "\(pattern) \(color) and \(secondColor) \(type)")
+                                                showCloneButton: dragonPresentInDragondex(type: type, pattern: pattern, color: color, secondColor: secondColor.rawValue)
+                                                //string: "\(pattern) \(color) and \(secondColor) \(type)")
+                                                )
                                         //}
                                     }
                                     .padding()

@@ -21,10 +21,13 @@ struct DragondexCloningButton: View {
     let pattern: String
     let color: String
     let showCloneButton: Bool
-    let string: String
+    var string: String {
+        "\(pattern) \(color) and \(secondColor) \(type)"
+    }
+    
+    @State var returnToDashboard = false
     
     var body: some View {
-        @State var returnToDashboard: Bool = false
         
         let ct = DragonStruct.DragonType(rawValue: type) ?? .Dragon
         let cp = DragonStruct.DragonPattern(rawValue: pattern) ?? .Basic
@@ -42,7 +45,7 @@ struct DragondexCloningButton: View {
             if showCloneButton {
                 Button {
                     cloneDragon(cloningPrice: Int16(cloningPrice), secondaryColor: secondColorRaw)
-                    returnToDashboard = true
+                    returnToDashboard.toggle()
                 } label: {
                     Text("Clone for\n\(cloningPrice) coins")
                         .multilineTextAlignment(.center)
@@ -80,5 +83,16 @@ struct DragondexCloningButton: View {
         } catch {
             print(error)
         }
+    }
+}
+
+#Preview {
+    NavigationStack {
+        DragondexCloningButton(
+            secondColor: DragonStruct.SecondaryColor.Black,
+            type: "Dragon",
+            pattern: "Basic",
+            color: "Black",
+            showCloneButton: true).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }
