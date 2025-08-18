@@ -16,11 +16,23 @@ struct GrowAdultView: View {
     //pull all the other dragons
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Dragon.id, ascending: true)]) private var potentialMates: FetchedResults<Dragon>
     
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \User.id, ascending: true)],
+        animation: .default) private var users: FetchedResults<User>
+    
     @State private var mateChosen = false
     @State private var selectedMate: Dragon? = nil
     
     
-    @State private var randomDragon: Dragon = DragonStruct.returnCoreDataDragonFromDragonStruct(dragon: DragonStruct.returnRandomDragon(age: .Adult), in: PersistenceController.shared.container.viewContext)
+    //get the user's highest type & pattern
+    private var highestDragonType: DragonStruct.DragonType {
+        return DragonStruct.DragonType(rawValue: DragonStruct.DragonType.RawValue( users[0].highestTypeAllowed!)) ?? .Dragon
+    }
+    private var highestDragonPattern: DragonStruct.DragonPattern{
+        return DragonStruct.DragonPattern(rawValue: DragonStruct.DragonPattern.RawValue( users[0].highestPatternAllowed!)) ?? .Basic
+    }
+    
+    private var randomDragon: Dragon { DragonStruct.returnCoreDataDragonFromDragonStruct(dragon: DragonStruct.returnRandomDragon(age: .Adult, highestType: highestDragonType, highestPattern: highestDragonPattern), in: PersistenceController.shared.container.viewContext)
+    }
     
     
     @State private var showWritingPage = false

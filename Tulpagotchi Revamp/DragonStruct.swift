@@ -95,7 +95,7 @@ struct DragonStruct : Identifiable, Codable {
         if !owned {
             imageURL = baseURL + "tulpagotchi-images/\(dragon.dragonType)/\(dragon.dragonType)Shadow.png"
         } else if dragon.dragonAge == DragonStruct.DragonAge.Egg {
-            imageURL = "https://tulpagotchi-images.s3.us-east-1.amazonaws.com/images/egg.png"
+            imageURL = "\(Constants.imageBaseUrl)/images/egg.png"
         } else {
             imageURL = baseURL +  "\(dragon.dragonType)/\(dragon.dragonPattern)/\(dragon.dragonPattern)_\(dragon.dragonAge)/\(dragon.dragonPattern)_\(dragon.dragonAge)_\(dragon.dragonMain)_\(dragon.dragonSecond).png"
         }
@@ -340,11 +340,36 @@ struct DragonStruct : Identifiable, Codable {
         return sellingPrice
     }
     
-    static func returnRandomDragon(age ofAge: DragonAge) -> DragonStruct
+    static func returnRandomDragon(age ofAge: DragonAge, highestType: DragonType, highestPattern: DragonPattern) -> DragonStruct
     {
+        var dragonTypes: [DragonType] = []
+        var dragonPatterns: [DragonPattern] = []
+        
+        switch highestType {
+            case .Dragon:
+                dragonTypes = [.Dragon]
+            case .Gryphon:
+                dragonTypes = [.Dragon, .Gryphon]
+            case .Phoenix:
+                dragonTypes = [.Dragon, .Gryphon, .Phoenix]
+            case .Kraken:
+                dragonTypes = [.Dragon, .Gryphon, .Phoenix, .Kraken]
+            case .Cthulhu, .All:
+                dragonTypes = [.Dragon, .Gryphon, .Phoenix, .Kraken, .Cthulhu]
+        }
+        
+        switch highestPattern {
+            case .Basic:
+                dragonPatterns = [.Basic]
+            case .Striped:
+                dragonPatterns = [.Basic, .Striped]
+            case .Mottled, .All:
+                dragonPatterns = [.Basic, .Striped, .Mottled]
+        }
+        
         var dragon = DragonStruct(
-            dragonType: DragonType.allCases.dropLast().randomElement() ?? DragonType.Dragon,
-            dragonPattern: DragonPattern.allCases.dropLast().randomElement() ?? DragonPattern.Basic,
+            dragonType: dragonTypes.randomElement() ?? DragonType.Dragon,
+            dragonPattern: dragonPatterns.randomElement() ?? DragonPattern.Basic,
             dragonMain: MainColor.allCases.dropLast().randomElement() ?? MainColor.Black,
             dragonSecond: SecondaryColor.allCases.dropLast().randomElement() ?? SecondaryColor.White,
             dragonAge: ofAge,

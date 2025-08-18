@@ -14,7 +14,7 @@ struct ContentView: View {
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \User.id, ascending: true)],
         animation: .default)
-    private var user: FetchedResults<User>
+    private var users: FetchedResults<User>
     
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Dragon.id, ascending: true)],
@@ -23,10 +23,20 @@ struct ContentView: View {
     private var dragons: FetchedResults<Dragon>
     @State private var userName: String = ""
     
-    private let randomDragon: DragonStruct = DragonStruct.returnRandomDragon(age: DragonStruct.DragonAge.Baby)
+    //get the user's highest type & pattern
+    private var highestDragonType: DragonStruct.DragonType {
+        return DragonStruct.DragonType(rawValue: DragonStruct.DragonType.RawValue( users[0].highestTypeAllowed!)) ?? .Dragon
+    }
+    private var highestDragonPattern: DragonStruct.DragonPattern{
+        return DragonStruct.DragonPattern(rawValue: DragonStruct.DragonPattern.RawValue( users[0].highestPatternAllowed!)) ?? .Basic
+    }
+    
+    private var randomDragon: DragonStruct {
+        DragonStruct.returnRandomDragon(age: DragonStruct.DragonAge.Baby, highestType: highestDragonType, highestPattern: highestDragonPattern)
+    }
 
     var body: some View {
-        if(dragons.count == 0 && user.count == 0) {
+        if(dragons.count == 0 && users.count == 0) {
             GeometryReader { geo in
                 ZStack {
                     Image(.rainbow1)
