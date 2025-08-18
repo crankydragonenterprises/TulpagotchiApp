@@ -120,6 +120,20 @@ struct ContentView: View {
         newDragon2.dragonSellingPrice = Utilities.returnSellingPrice(dragon: newDragon2)
         newDragon2.dragonCloningPrice = Utilities.returnCloningPrice(type: DragonStruct.DragonType(rawValue: newDragon2.dragonType!) ?? DragonStruct.DragonType.Dragon, pattern: DragonStruct.DragonPattern(rawValue: newDragon2.dragonPattern!) ?? DragonStruct.DragonPattern.Basic, color: DragonStruct.MainColor(rawValue: newDragon2.dragonMain!) ?? DragonStruct.MainColor.Black, secondColor: DragonStruct.SecondaryColor(rawValue: newDragon2.dragonSecond!) ?? DragonStruct.SecondaryColor.Black)
         
+        let dragondexEntry1 = DragondexEntry(context: viewContext)
+        dragondexEntry1.id = 1
+        dragondexEntry1.type = "Dragon"
+        dragondexEntry1.pattern = "Basic"
+        dragondexEntry1.mainColor = "Green"
+        dragondexEntry1.secondColor = "Green"
+        
+        let dragondexEntry2 = DragondexEntry(context: viewContext)
+        dragondexEntry2.id = 2
+        dragondexEntry2.type = "Dragon"
+        dragondexEntry2.pattern = "Basic"
+        dragondexEntry2.mainColor = "Brown"
+        dragondexEntry2.secondColor = "Brown"
+        
         do {
             try viewContext.save()
         } catch {
@@ -131,18 +145,3 @@ struct ContentView: View {
 #Preview {
     ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
 }
-
-//struct UserAndDragonView: View {
-//    let user: User
-//    let dragons: FetchedResults<Dragon>
-//    
-//    var body: some View {
-//        VStack {
-//            Text("User ID: \(user.id ?? "Unknown User")")
-//            
-//            ForEach(dragons) {dragon in
-//                Text("Dragon ID: \(dragon.id ?? "Unknown Dragon")")
-//            }
-//        }
-//    }
-//}

@@ -17,6 +17,18 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
+    <entity name="DragondexEntry" representedClassName="DragondexEntry" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="mainColor" optional="YES" attributeType="String"/>
+        <attribute name="pattern" optional="YES" attributeType="String"/>
+        <attribute name="secondColor" optional="YES" attributeType="String"/>
+        <attribute name="type" optional="YES" attributeType="String"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
     <entity name="Entry" representedClassName="Entry" syncable="YES" codeGenerationType="class">
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="projectID" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>

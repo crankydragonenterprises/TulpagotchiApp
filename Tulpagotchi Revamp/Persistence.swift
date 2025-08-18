@@ -53,7 +53,7 @@ struct PersistenceController {
         newUser.currentLevel = 37
         newUser.dailyGoal = 200
         newUser.dailyProgress = 50
-        newUser.coins = 75
+        newUser.coins = 7500
         newUser.highestTypeAllowed = "Dragon"
         newUser.highestPatternAllowed = "Mottled"
         
@@ -102,6 +102,20 @@ struct PersistenceController {
             pattern: DragonStruct.DragonPattern(rawValue: newDragon3.dragonPattern!) ?? DragonStruct.DragonPattern.Basic,
             color: DragonStruct.MainColor(rawValue: newDragon3.dragonMain!) ?? DragonStruct.MainColor.Black,
             secondColor: DragonStruct.SecondaryColor(rawValue: newDragon3.dragonSecond!) ?? DragonStruct.SecondaryColor.Black)
+        
+        let dragondexEntry1 = DragondexEntry(context: viewContext)
+        dragondexEntry1.id = 1
+        dragondexEntry1.type = "Dragon"
+        dragondexEntry1.pattern = "Basic"
+        dragondexEntry1.mainColor = "Green"
+        dragondexEntry1.secondColor = "Green"
+        
+        let dragondexEntry2 = DragondexEntry(context: viewContext)
+        dragondexEntry2.id = 2
+        dragondexEntry2.type = "Dragon"
+        dragondexEntry2.pattern = "Basic"
+        dragondexEntry2.mainColor = "Brown"
+        dragondexEntry2.secondColor = "Brown"
         
         do {
             try viewContext.save()
