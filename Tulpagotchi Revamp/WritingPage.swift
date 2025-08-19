@@ -17,6 +17,14 @@ struct WritingPage: View {
         sortDescriptors: [NSSortDescriptor(keyPath: \User.id, ascending: true)],
         animation: .default) private var users: FetchedResults<User>
     
+    
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \DragondexEntry.id, ascending: true)],
+        animation: .default) private var allDragondexEntries: FetchedResults<DragondexEntry>
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \DragondexEntry.id, ascending: true)],
+        animation: .default) private var filteredDragondexEntries: FetchedResults<DragondexEntry>
+    
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Project.id, ascending: true)],
         animation: .default) private var projects: FetchedResults<Project>
@@ -212,6 +220,27 @@ struct WritingPage: View {
         
     }
     
+    func dragonPresentInDragondex(type dragonType: String, pattern dragonPattern: String, color dragonColor: String, secondColor dragonSecondary: String) -> Bool {
+        
+        var dynamicPredicate: NSPredicate {
+            var predicates : [NSPredicate] = []
+            
+            //search predicate
+            predicates.append(NSPredicate(format: "type contains[c] %@", dragonType))
+            predicates.append(NSPredicate(format: "pattern contains[c] %@", dragonPattern))
+            predicates.append(NSPredicate(format: "mainColor contains[c] %@", dragonColor))
+            predicates.append(NSPredicate(format: "secondColor contains[c] %@", dragonSecondary))
+            
+            //combine predicate and return
+            return NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+        }
+        
+        filteredDragondexEntries.nsPredicate = dynamicPredicate
+        
+        if filteredDragondexEntries.count > 0 { return true }
+        else { return false }
+    }
+    
     func returnNumberOfEggs() -> Int {
         var numberOfEggs: Int
         if dragons[0].dragonAge == "Adult" { numberOfEggs = 1}
@@ -307,10 +336,12 @@ struct WritingPage: View {
             let motherDragon = dragons[0]
             let fatherDragon = dragons[1]
             
+            //make a new egg
             let newDragon = Dragon(context: viewContext)
             newDragon.id = Utilities.generateRandomGuid(length: 10)
             newDragon.dragonAge = "Egg"
             
+            //mix the mother and father characteristics
             var randomNumber = Int.random(in: 0...1)
             var babysType: String
             if randomNumber == 0 {
@@ -347,7 +378,20 @@ struct WritingPage: View {
             
             newDragon.dragonImageLocation = Utilities.returnImageLocation(dragon: newDragon)
             
-            print(newDragon.prettyName)
+            //check if the new dragon is in the dragondex; add it if not
+            if !dragonPresentInDragondex(type: newDragon.dragonType!, pattern: newDragon.dragonPattern!, color: newDragon.dragonMain!, secondColor: newDragon.dragonSecond!) {
+                
+                print("dragondex Count: \(allDragondexEntries.count)")
+                
+                let newDragondexEntry = DragondexEntry(context: viewContext)
+                newDragondexEntry.id = Int16(allDragondexEntries.count + 1)
+                newDragondexEntry.type = newDragon.dragonType!
+                newDragondexEntry.pattern = newDragon.dragonPattern!
+                newDragondexEntry.mainColor = newDragon.dragonMain!
+                newDragondexEntry.secondColor = newDragon.dragonSecond!
+                
+                print("\(newDragondexEntry)")
+            }
         }
         
         //if the dragon is a baby, update it to be an adult
@@ -366,6 +410,7 @@ struct WritingPage: View {
         
         do {
             try viewContext.save()
+            print("Save successful!")
         } catch {
             print(error)
         }

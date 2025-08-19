@@ -61,7 +61,6 @@ struct GrowBabyAndEggView: View {
                             (dragon.dragonAge == "Baby") ? 200 : 100
                         }
                         
-                        
                         Button {
                             //sell the dragon
                             do {
