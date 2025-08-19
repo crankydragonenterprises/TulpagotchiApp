@@ -9,11 +9,11 @@ import SwiftUI
 import Foundation
 import CoreData
 
-struct DragonStruct : Identifiable, Codable {
-    var id: String?
+struct DragonStruct : Identifiable {
+    let id: String?
     let dragonType: DragonType
     let dragonPattern: DragonPattern
-    var dragonMain: MainColor
+    let dragonMain: MainColor
     let dragonSecond: SecondaryColor
     var dragonAge: DragonAge
     var dragonSellingPrice: Int = 0
@@ -32,7 +32,7 @@ struct DragonStruct : Identifiable, Codable {
     }
     
     //enums
-    enum DragonType: String, CaseIterable, Codable, Identifiable {
+    enum DragonType: String, CaseIterable, Identifiable {
         var id: Self { self }
         case Dragon
         case Gryphon
@@ -41,14 +41,14 @@ struct DragonStruct : Identifiable, Codable {
         case Cthulhu
         case All
     }
-    enum DragonPattern: String, CaseIterable, Codable, Identifiable {
+    enum DragonPattern: String, CaseIterable, Identifiable {
         var id: Self { self }
         case Basic
         case Striped
         case Mottled
         case All
     }
-    enum MainColor: String, CaseIterable, Codable, Identifiable {
+    enum MainColor: String, CaseIterable, Identifiable {
         var id: Self { self }
         case Red
         case Orange
@@ -64,7 +64,7 @@ struct DragonStruct : Identifiable, Codable {
         case Rainbow
         case All
     }
-    enum SecondaryColor: String, CaseIterable, Codable, Identifiable {
+    enum SecondaryColor: String, CaseIterable, Identifiable {
         var id: Self { self }
         case Red
         case Orange
@@ -79,7 +79,7 @@ struct DragonStruct : Identifiable, Codable {
         case White
         case All
     }
-    enum DragonAge: String, CaseIterable, Codable, Identifiable {
+    enum DragonAge: String, CaseIterable, Identifiable {
         var id: Self { self }
         case Egg
         case Baby

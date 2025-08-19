@@ -30,12 +30,12 @@ struct Footer: View {
                 } label : {
                     FooterIcon(imageName: "lizard.fill", darkMode: darkMode)
                 }
-//                Spacer()
-//                NavigationLink {
-//                    Store()
-//                } label: {
-//                    FooterIcon(imageName: "cart.fill")
-//                }
+                Spacer()
+                NavigationLink {
+                    Store().environment(\.managedObjectContext, viewContext)
+                } label: {
+                    FooterIcon(imageName: "cart.fill", darkMode: darkMode)
+                }
 //                Spacer()
 //                NavigationLink {
 //                    Preferences()

@@ -132,6 +132,10 @@ struct ContentView: View {
         dragondexEntry2.mainColor = "Brown"
         dragondexEntry2.secondColor = "Brown"
         
+        let appSettings = AppSettings(context: viewContext)
+        appSettings.id = 1
+        appSettings.lastFetchedStoreDragons = Calendar.current.date(byAdding: .day, value: -1, to: Date())
+        
         do {
             try viewContext.save()
         } catch {

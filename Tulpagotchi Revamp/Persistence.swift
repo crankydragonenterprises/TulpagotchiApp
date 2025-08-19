@@ -128,6 +128,28 @@ struct PersistenceController {
         dragondexEntry2.mainColor = "Brown"
         dragondexEntry2.secondColor = "Brown"
         
+        let appSettings = AppSettings(context: viewContext)
+        appSettings.id = 1
+        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date())
+        appSettings.lastFetchedStoreDragons = yesterday
+        
+        let storeDragonStructs = [
+            DragonStruct.returnRandomDragon(age: DragonStruct.DragonAge.Baby, highestType: DragonStruct.DragonType.Dragon, highestPattern: DragonStruct.DragonPattern.Mottled),
+            DragonStruct.returnRandomDragon(age: DragonStruct.DragonAge.Baby, highestType: DragonStruct.DragonType.Dragon, highestPattern: DragonStruct.DragonPattern.Mottled),
+            DragonStruct.returnRandomDragon(age: DragonStruct.DragonAge.Baby, highestType: DragonStruct.DragonType.Dragon, highestPattern: DragonStruct.DragonPattern.Mottled),
+        ]
+        for dragon in storeDragonStructs {
+            let id = Int.random(in: 1...1000)
+            
+            let storeDragon = StoreDragon(context: viewContext)
+            storeDragon.id = Int16(id)
+            storeDragon.type = dragon.dragonType.rawValue
+            storeDragon.pattern = dragon.dragonPattern.rawValue
+            storeDragon.color = dragon.dragonMain.rawValue
+            storeDragon.secondColor = dragon.dragonSecond.rawValue
+            storeDragon.purchased = false
+        }
+        
         do {
             try viewContext.save()
         } catch {
