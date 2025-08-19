@@ -18,7 +18,12 @@ struct Dashboard: View {
     private var user: FetchedResults<User>
     
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Dragon.id, ascending: true)],
+        sortDescriptors: [
+            NSSortDescriptor(keyPath: \Dragon.dragonAge, ascending: true),
+            NSSortDescriptor(keyPath: \Dragon.dragonPattern, ascending: true),
+            NSSortDescriptor(keyPath: \Dragon.dragonMain, ascending: true),
+            NSSortDescriptor(keyPath: \Dragon.dragonSecond, ascending: true)
+        ],
         animation: .default
     )
     private var dragons: FetchedResults<Dragon>

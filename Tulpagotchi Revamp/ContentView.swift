@@ -20,7 +20,9 @@ struct ContentView: View {
 //    }
     
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Dragon.id, ascending: true)],
+        sortDescriptors: [
+            NSSortDescriptor(keyPath: \Dragon.id, ascending: true)
+        ],
         animation: .default
     )
     private var dragons: FetchedResults<Dragon>
