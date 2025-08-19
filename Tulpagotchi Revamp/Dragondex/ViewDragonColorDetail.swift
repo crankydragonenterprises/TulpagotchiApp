@@ -35,22 +35,23 @@ struct ViewDragonColorDetail: View {
                         .font(.largeTitle)
                         .fontWeight(.bold)
                         .padding()
-                    ZStack {
-                        Color(.white).opacity(0.5)
-                            .padding()
-                        //list of dragons with clone button if they have gotten the dragon
-                        ScrollView {
-                            VStack {
-                                ForEach(DragonStruct.SecondaryColor.allCases.dropLast()) { secondColor in
-                                    
-                                    
-                                    HStack {
-                                        //image
-                                        let imageUrl: URL = returnImageURL(forType: type, forPattern: pattern, forColor: color, forSecondcolor: secondColor.rawValue)
+                    VStack {
+                        ZStack {
+                            Color(.white).opacity(0.5)
+                                .padding()
+                            //list of dragons with clone button if they have gotten the dragon
+                            ScrollView {
+                                VStack {
+                                    ForEach(DragonStruct.SecondaryColor.allCases.dropLast()) { secondColor in
                                         
-                                        DragonImage(imageUrl: imageUrl)
-                                        Spacer()
-                                        //VStack {
+                                        
+                                        HStack {
+                                            //image
+                                            let imageUrl: URL = returnImageURL(forType: type, forPattern: pattern, forColor: color, forSecondcolor: secondColor.rawValue)
+                                            
+                                            DragonImage(imageUrl: imageUrl)
+                                            Spacer()
+                                            //VStack {
                                             //Text("\(pattern) \(color) and \(secondColor) \(type)")
                                             
                                             DragondexCloningButton(
@@ -60,18 +61,19 @@ struct ViewDragonColorDetail: View {
                                                 color: color,
                                                 showCloneButton: dragonPresentInDragondex(type: type, pattern: pattern, color: color, secondColor: secondColor.rawValue)
                                                 //string: "\(pattern) \(color) and \(secondColor) \(type)")
-                                                )
-                                        //}
+                                            )
+                                            //}
+                                        }
+                                        .padding()
+                                        Spacer()
                                     }
-                                    .padding()
-                                    Spacer()
                                 }
+                                .padding()
                             }
                             .padding()
                         }
-                        .padding()
+                        Footer()
                     }
-                    
                 }
                 .frame(width: geo.size.width, height: geo.size.height)
             }

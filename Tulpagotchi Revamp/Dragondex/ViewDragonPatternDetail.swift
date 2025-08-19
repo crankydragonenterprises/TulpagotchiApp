@@ -29,38 +29,43 @@ struct ViewDragonPatternDetail: View {
                     .opacity(0.5)
                 VStack (alignment: .leading) {
                     Text("\(pattern) \(type)s")
+                        .padding()
                         .font(.largeTitle)
                         .fontWeight(.bold)
-                    ZStack {
+                    VStack {
+                        ZStack {
                         Color(.white).opacity(0.5)
                             .padding()
-                        ScrollView {
-                            VStack {
-                                ForEach(DragonStruct.MainColor.allCases.dropLast()) { color in
-                                    NavigationLink {
-                                        ViewDragonColorDetail(type: type, pattern: pattern, color: color.rawValue).environment(\.managedObjectContext, viewContext)
-                                    } label: {
-                                        HStack {
-                                            AsyncImage(url: returnImageURL(forType: type, forPattern: pattern, forColor: color.rawValue)) { image in
-                                                image
-                                                    .resizable()
-                                                    .scaledToFit()
-                                                    .frame(width: 150, height: 150)
-                                                    .shadow(color: .white, radius: 2)
-                                            } placeholder: {
-                                                ProgressView()
+                        
+                            ScrollView {
+                                VStack {
+                                    ForEach(DragonStruct.MainColor.allCases.dropLast()) { color in
+                                        NavigationLink {
+                                            ViewDragonColorDetail(type: type, pattern: pattern, color: color.rawValue).environment(\.managedObjectContext, viewContext)
+                                        } label: {
+                                            HStack {
+                                                AsyncImage(url: returnImageURL(forType: type, forPattern: pattern, forColor: color.rawValue)) { image in
+                                                    image
+                                                        .resizable()
+                                                        .scaledToFit()
+                                                        .frame(width: 150, height: 150)
+                                                        .shadow(color: .white, radius: 2)
+                                                } placeholder: {
+                                                    ProgressView()
+                                                }
+                                                Spacer()
+                                                Text("\(pattern) \(color) \(type)s").font(.title)
                                             }
+                                            .padding()
                                             Spacer()
-                                            Text("\(color) \(pattern) \(type)s").font(.title)
                                         }
-                                        .padding()
-                                        Spacer()
                                     }
                                 }
+                                .padding()
                             }
                             .padding()
                         }
-                        .padding()
+                        Footer()
                     }
                     
                 }

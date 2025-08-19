@@ -181,7 +181,7 @@ struct Dashboard: View {
                         .padding()
                     }
                     
-                    Text("")
+                    Footer()
                 }
                 .padding()
             }

@@ -33,35 +33,38 @@ struct Dragondex: View {
                         ZStack {
                             Color(.white).opacity(0.5)
                                 .padding()
-                            ScrollView {
-                                VStack {
-                                    ForEach(DragonStruct.DragonType.allCases.dropLast()) {type in
-                                        NavigationLink {
-                                            ViewDragonTypeDetail(type: type.rawValue).environment(\.managedObjectContext, viewContext)
-                                        } label: {
-                                            HStack {
-                                                AsyncImage(url: returnImageURL(for: type.rawValue)) { image in
-                                                    image
-                                                        .resizable()
-                                                        .scaledToFit()
-                                                        .frame(width: 150, height: 150)
-                                                        .shadow(color: .white, radius: 2)
-                                                } placeholder: {
-                                                    ProgressView()
+                                ScrollView {
+                                    VStack {
+                                        ForEach(DragonStruct.DragonType.allCases.dropLast()) {type in
+                                            NavigationLink {
+                                                ViewDragonTypeDetail(type: type.rawValue).environment(\.managedObjectContext, viewContext)
+                                            } label: {
+                                                HStack {
+                                                    AsyncImage(url: returnImageURL(for: type.rawValue)) { image in
+                                                        image
+                                                            .resizable()
+                                                            .scaledToFit()
+                                                            .frame(width: 150, height: 150)
+                                                            .shadow(color: .white, radius: 2)
+                                                    } placeholder: {
+                                                        ProgressView()
+                                                    }
+                                                    Spacer()
+                                                    Text("\(type)")
+                                                        .font(.title)
                                                 }
+                                                .padding()
                                                 Spacer()
-                                                Text("\(type)")
-                                                    .font(.title)
                                             }
-                                            .padding()
-                                            Spacer()
                                         }
                                     }
+                                    .padding()
                                 }
                                 .padding()
-                            }
-                            .padding()
+                            
                         }
+                        
+                        Footer()
                         
                     }
                     .frame(width: geo.size.width, height: geo.size.height)

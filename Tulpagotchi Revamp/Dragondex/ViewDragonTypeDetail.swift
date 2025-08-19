@@ -30,35 +30,38 @@ struct ViewDragonTypeDetail: View {
                     Text("\(type)")
                         .font(.largeTitle)
                         .fontWeight(.bold)
-                    ZStack {
-                        Color(.white).opacity(0.5)
-                            .padding()
-                        VStack {
-                            ForEach(DragonStruct.DragonPattern.allCases.dropLast()) { pattern in
-                                NavigationLink {
-                                    ViewDragonPatternDetail(type: type, pattern: pattern.rawValue).environment(\.managedObjectContext, viewContext)
-                                } label: {
-                                    HStack {
-                                        AsyncImage(url: returnImageURL(forType: type, forPattern: pattern.rawValue)) { image in
-                                            image
-                                                .resizable()
-                                                .scaledToFit()
-                                                .frame(width: 150, height: 150)
-                                                .shadow(color: .white, radius: 2)
-                                        } placeholder: {
-                                            ProgressView()
+                    VStack {
+                        ZStack {
+                            Color(.white).opacity(0.5)
+                                .padding()
+                            VStack {
+                                ForEach(DragonStruct.DragonPattern.allCases.dropLast()) { pattern in
+                                    NavigationLink {
+                                        ViewDragonPatternDetail(type: type, pattern: pattern.rawValue).environment(\.managedObjectContext, viewContext)
+                                    } label: {
+                                        HStack {
+                                            AsyncImage(url: returnImageURL(forType: type, forPattern: pattern.rawValue)) { image in
+                                                image
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(width: 150, height: 150)
+                                                    .shadow(color: .white, radius: 2)
+                                            } placeholder: {
+                                                ProgressView()
+                                            }
+                                            Spacer()
+                                            Text("\(pattern) \(type)s")
+                                                .font(.title)
                                         }
+                                        .padding()
                                         Spacer()
-                                        Text("\(pattern) \(type)s")
-                                            .font(.title)
                                     }
-                                    .padding()
-                                    Spacer()
                                 }
+                                Spacer()
                             }
-                            Spacer()
+                            .padding()
                         }
-                        .padding()
+                        Footer()
                     }
                     
                 }
