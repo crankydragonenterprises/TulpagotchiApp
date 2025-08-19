@@ -15,6 +15,9 @@ struct ContentView: View {
         sortDescriptors: [NSSortDescriptor(keyPath: \User.id, ascending: true)],
         animation: .default)
     private var users: FetchedResults<User>
+//    private var user: User? {
+//        users.isEmpty ? nil : users[0]
+//    }
     
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Dragon.id, ascending: true)],
@@ -23,16 +26,8 @@ struct ContentView: View {
     private var dragons: FetchedResults<Dragon>
     @State private var userName: String = ""
     
-    //get the user's highest type & pattern
-    private var highestDragonType: DragonStruct.DragonType {
-        return DragonStruct.DragonType(rawValue: DragonStruct.DragonType.RawValue( users[0].highestTypeAllowed!)) ?? .Dragon
-    }
-    private var highestDragonPattern: DragonStruct.DragonPattern{
-        return DragonStruct.DragonPattern(rawValue: DragonStruct.DragonPattern.RawValue( users[0].highestPatternAllowed!)) ?? .Basic
-    }
-    
     private var randomDragon: DragonStruct {
-        DragonStruct.returnRandomDragon(age: DragonStruct.DragonAge.Baby, highestType: highestDragonType, highestPattern: highestDragonPattern)
+        DragonStruct.returnRandomDragon(age: DragonStruct.DragonAge.Baby, highestType: DragonStruct.DragonType.Dragon, highestPattern: DragonStruct.DragonPattern.Basic)
     }
 
     var body: some View {
@@ -80,6 +75,7 @@ struct ContentView: View {
         }
         else {
             Dashboard()
+                .environment(\.managedObjectContext, viewContext)
         }
     }
     

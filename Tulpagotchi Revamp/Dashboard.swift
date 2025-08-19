@@ -59,6 +59,11 @@ struct Dashboard: View {
         guard goal > 0 else { return 0 }
         return Double(u.dailyProgress) / goal
     }
+    
+    var userName: String {
+        guard let u = user.first else { return "Unknown User"}
+        return u.id ?? "No user ID"
+    }
 
     
     //Filters
@@ -207,5 +212,6 @@ struct Dashboard: View {
 }
 
 #Preview {
-    Dashboard().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+    Dashboard()
+        .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
 }

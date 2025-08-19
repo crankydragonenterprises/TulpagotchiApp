@@ -15,6 +15,7 @@ struct GrowDragonView: View {
     var body: some View {
         if dragon.dragonAge == "Baby" || dragon.dragonAge == "Egg" {
             GrowBabyAndEggView()
+                .environmentObject(dragon)
         } else if dragon.dragonAge == "Adult" {
             GrowAdultView()
         }

@@ -6,12 +6,31 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct GrowBabyAndEggView: View {
     
     @Environment(\.managedObjectContext) private var viewContext
     
     @EnvironmentObject private var dragon: Dragon
+//    
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \User.id, ascending: true)],
+        animation: .default)
+    private var user: FetchedResults<User>
+//
+//    var User: User {
+//        let context = viewContext
+//        
+//        let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
+//        fetchRequest.fetchLimit = 1
+//        
+//        let results = try! context.fetch(fetchRequest)
+//        
+//        return results.first!
+//    }
+    
+    @State var returnToDashboard = false
     
     var body: some View {
         GeometryReader { geo in
@@ -23,7 +42,7 @@ struct GrowBabyAndEggView: View {
                     .opacity(0.6)
                 
                 VStack {
-                    Text("Grow your \(dragon.dragonType!)")
+                    Text("Grow your \(dragon.dragonType ?? "Unknown Type")")
                         .font(.largeTitle)
                         .fontWeight(.bold)
                     
@@ -42,15 +61,35 @@ struct GrowBabyAndEggView: View {
                             (dragon.dragonAge == "Baby") ? 200 : 100
                         }
                         
+                        
                         Button {
                             //sell the dragon
+                            do {
+                                
+                                let sellingPrice = dragon.dragonSellingPrice / 4
+                                
+                                user.first?.coins += Int64(sellingPrice)
+                                viewContext.delete(dragon)
+                                
+                                try viewContext.save()
+                                
+                            } catch {
+                                print(error)
+                            }
+                            
+                            returnToDashboard = true
+                            
                         } label: {
                             Text("Sell for \(dragon.dragonSellingPrice / 4) coins")
+                            //Text("Sell")
                         }
                         .padding()
                         .background(.orange)
                         .foregroundStyle(.black)
                         .clipShape(.rect(cornerRadius: 10))
+                        .navigationDestination(isPresented: $returnToDashboard) {
+                            Dashboard().environment(\.managedObjectContext, viewContext)
+                        }
                         
                         Spacer()
                         
@@ -77,9 +116,13 @@ struct GrowBabyAndEggView: View {
     }
 }
 
+
+
 #Preview {
     NavigationStack {
         GrowBabyAndEggView()
+            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
             .environmentObject(PersistenceController.previewDragon)
+            .environmentObject(PersistenceController.previewUser)
     }
 }

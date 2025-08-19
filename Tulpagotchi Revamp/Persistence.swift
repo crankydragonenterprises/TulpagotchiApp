@@ -21,6 +21,17 @@ struct PersistenceController {
         return results.first!
     }
     
+    static var previewUser: User {
+        let context = PersistenceController.preview.container.viewContext
+        
+        let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
+        fetchRequest.fetchLimit = 1
+        
+        let results = try! context.fetch(fetchRequest)
+        
+        return results.first!
+    }
+    
     static var allDragons: [Dragon] {
         let context = PersistenceController.shared.container.viewContext
         
@@ -94,7 +105,7 @@ struct PersistenceController {
         newDragon3.dragonPattern = DragonStruct.DragonPattern.Basic.rawValue
         newDragon3.dragonMain = DragonStruct.MainColor.Brown.rawValue
         newDragon3.dragonSecond = DragonStruct.SecondaryColor.Brown.rawValue
-        newDragon3.dragonAge = DragonStruct.DragonAge.Adult.rawValue
+        newDragon3.dragonAge = DragonStruct.DragonAge.Egg.rawValue
         newDragon3.dragonImageLocation =  Utilities.returnImageLocation(dragon: newDragon3)
         newDragon3.dragonSellingPrice = Utilities.returnSellingPrice(dragon: newDragon3)
         newDragon3.dragonCloningPrice = Utilities.returnCloningPrice(

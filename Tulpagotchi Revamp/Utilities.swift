@@ -6,6 +6,9 @@
 //
 
 import Foundation
+import CoreData
+import SwiftUICore
+import SwiftUI
 
 enum Utilities {
     //generate a guid
@@ -150,130 +153,152 @@ enum Utilities {
      }
      
      //return the selling price based on the dragon's characteristics
-     static func returnSellingPrice(dragon: Dragon) -> Int16 {
-         var sellingPrice : Int16 = 0
+    static func returnSellingPrice(dragon: Dragon) -> Int16 {
+        var sellingPrice : Int16 = 0
+    
+        switch(dragon.dragonAge) {
+        case "All":
+        sellingPrice += 0
+        case "Egg":
+        sellingPrice += 0
+        case "Baby":
+        sellingPrice += 100
+        case "Adult":
+        sellingPrice += 200
+        case .none:
+            sellingPrice += 0
+        case .some(_):
+            sellingPrice += 0
+        }
+        
+        switch(dragon.dragonType) {
+        case "Dragon":
+        sellingPrice += 50
+        case "Gryphon":
+        sellingPrice += 100
+        case "Phoenix":
+        sellingPrice += 150
+        case "Kraken":
+        sellingPrice += 200
+        case "Cthulhu":
+        sellingPrice += 250
+        case "All":
+        sellingPrice += 0
+        case .none:
+            sellingPrice += 0
+        case .some(_):
+            sellingPrice += 0
+        }
+        
+        switch(dragon.dragonPattern)
+        {
+        
+        case "Basic":
+        sellingPrice += 25
+        case "Striped":
+        sellingPrice += 50
+        case "Mottled":
+        sellingPrice += 75
+        case "All":
+        sellingPrice += 0
+        case .none:
+            sellingPrice += 0
+        case .some(_):
+            sellingPrice += 0
+        }
+        
+        switch(dragon.dragonMain)
+        {
+        
+        case "Red":
+        sellingPrice += 10
+        case "Orange":
+        sellingPrice += 11
+        case "Yellow":
+        sellingPrice += 12
+        case "Green":
+        sellingPrice += 13
+        case "Cyan":
+        sellingPrice += 14
+        case "Blue":
+        sellingPrice += 15
+        case "Purple":
+        sellingPrice += 16
+        case "Pink":
+        sellingPrice += 17
+        case "Brown":
+        sellingPrice += 18
+        case "Black":
+        sellingPrice += 19
+        case "White":
+        sellingPrice += 20
+        case "Rainbow":
+        sellingPrice += 21
+        case "All":
+        sellingPrice += 0
+        case .none:
+            sellingPrice += 0
+        case .some(_):
+            sellingPrice += 0
+        }
+        
+        switch(dragon.dragonSecond)
+        {
+        
+        case "Red":
+        sellingPrice += 1
+        case "Orange":
+        sellingPrice += 2
+        case "Yellow":
+        sellingPrice += 3
+        case "Green":
+        sellingPrice += 4
+        case "Cyan":
+        sellingPrice += 5
+        case "Blue":
+        sellingPrice += 6
+        case "Purple":
+        sellingPrice += 7
+        case "Pink":
+        sellingPrice += 8
+        case "Brown":
+        sellingPrice += 9
+        case "Black":
+        sellingPrice += 10
+        case "White":
+        sellingPrice += 11
+        case "All":
+        sellingPrice += 0
+        case .none:
+            sellingPrice += 0
+        case .some(_):
+            sellingPrice += 0
+        }
+        
+        return sellingPrice
+    }
      
-     switch(dragon.dragonAge) {
-     case "All":
-     sellingPrice += 0
-     case "Egg":
-     sellingPrice += 0
-     case "Baby":
-     sellingPrice += 100
-     case "Adult":
-     sellingPrice += 200
-     case .none:
-         sellingPrice += 0
-     case .some(_):
-         sellingPrice += 0
-     }
-     
-     switch(dragon.dragonType) {
-     case "Dragon":
-     sellingPrice += 50
-     case "Gryphon":
-     sellingPrice += 100
-     case "Phoenix":
-     sellingPrice += 150
-     case "Kraken":
-     sellingPrice += 200
-     case "Cthulhu":
-     sellingPrice += 250
-     case "All":
-     sellingPrice += 0
-     case .none:
-         sellingPrice += 0
-     case .some(_):
-         sellingPrice += 0
-     }
-     
-     switch(dragon.dragonPattern)
-     {
-     
-     case "Basic":
-     sellingPrice += 25
-     case "Striped":
-     sellingPrice += 50
-     case "Mottled":
-     sellingPrice += 75
-     case "All":
-     sellingPrice += 0
-     case .none:
-         sellingPrice += 0
-     case .some(_):
-         sellingPrice += 0
-     }
-     
-     switch(dragon.dragonMain)
-     {
-     
-     case "Red":
-     sellingPrice += 10
-     case "Orange":
-     sellingPrice += 11
-     case "Yellow":
-     sellingPrice += 12
-     case "Green":
-     sellingPrice += 13
-     case "Cyan":
-     sellingPrice += 14
-     case "Blue":
-     sellingPrice += 15
-     case "Purple":
-     sellingPrice += 16
-     case "Pink":
-     sellingPrice += 17
-     case "Brown":
-     sellingPrice += 18
-     case "Black":
-     sellingPrice += 19
-     case "White":
-     sellingPrice += 20
-     case "Rainbow":
-     sellingPrice += 21
-     case "All":
-     sellingPrice += 0
-     case .none:
-         sellingPrice += 0
-     case .some(_):
-         sellingPrice += 0
-     }
-     
-     switch(dragon.dragonSecond)
-     {
-     
-     case "Red":
-     sellingPrice += 1
-     case "Orange":
-     sellingPrice += 2
-     case "Yellow":
-     sellingPrice += 3
-     case "Green":
-     sellingPrice += 4
-     case "Cyan":
-     sellingPrice += 5
-     case "Blue":
-     sellingPrice += 6
-     case "Purple":
-     sellingPrice += 7
-     case "Pink":
-     sellingPrice += 8
-     case "Brown":
-     sellingPrice += 9
-     case "Black":
-     sellingPrice += 10
-     case "White":
-     sellingPrice += 11
-     case "All":
-     sellingPrice += 0
-     case .none:
-         sellingPrice += 0
-     case .some(_):
-         sellingPrice += 0
-     }
-     
-     return sellingPrice
-     }
-     
-     
+    enum CoreDataDeleteError: Error { case missingContext }
+    
+    static func sellDragon(dragonToSell: NSManagedObject) throws {
+        print ("Selling dragon...")
+        guard let ctx = dragonToSell.managedObjectContext else { throw CoreDataDeleteError.missingContext }
+        try ctx.performAndWait {
+            ctx.delete(dragonToSell)
+            try ctx.save()
+        }
+        print("Sold dragon...")
+    }
+    
+//    static func sellDragon<Dragon: NSManagedObject>(context: NSManagedObjectContext, dragonToSell: Dragon) {
+//        context.delete(dragonToSell)
+//        
+//        do {
+//            try context.save()
+//            print("Successfully deleted object: \(dragonToSell)")
+//        } catch {
+//            context.rollback()
+//            print("Failed to delete object: \(error.localizedDescription)")
+//        }
+//    }
 }

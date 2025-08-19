@@ -33,9 +33,9 @@ struct GrowAdultView: View {
     
     private var randomDragon: Dragon { DragonStruct.returnCoreDataDragonFromDragonStruct(dragon: DragonStruct.returnRandomDragon(age: .Adult, highestType: highestDragonType, highestPattern: highestDragonPattern), in: PersistenceController.shared.container.viewContext)
     }
-    
-    
+
     @State private var showWritingPage = false
+    @State var returnToDashboard = false
     
     var body: some View {
         GeometryReader { geo in
@@ -47,7 +47,7 @@ struct GrowAdultView: View {
                     .opacity(0.6)
                 
                 VStack {
-                    Text("Match your \(dragon.dragonType!)")
+                    Text("Match your \(dragon.dragonType ?? "Dragon")")
                         .font(.largeTitle)
                         .fontWeight(.bold)
                     
@@ -114,6 +114,21 @@ struct GrowAdultView: View {
                         
                         Button {
                             //sell the dragon
+                            do {
+                                
+                                let sellingPrice = dragon.dragonSellingPrice / 4
+                                
+                                users.first?.coins += Int64(sellingPrice)
+                                viewContext.delete(dragon)
+                                
+                                try viewContext.save()
+                                
+                                
+                                returnToDashboard = true
+                                
+                            } catch {
+                                print(error)
+                            }
                         } label : {
                             Text("Sell for \(dragon.dragonSellingPrice) coins")
                         }
@@ -121,6 +136,9 @@ struct GrowAdultView: View {
                         .background(.orange)
                         .foregroundStyle(.black)
                         .clipShape(.rect(cornerRadius: 10))
+                        .navigationDestination(isPresented: $returnToDashboard) {
+                            Dashboard().environment(\.managedObjectContext, viewContext)
+                        }
                     }
                     .padding()
                     
