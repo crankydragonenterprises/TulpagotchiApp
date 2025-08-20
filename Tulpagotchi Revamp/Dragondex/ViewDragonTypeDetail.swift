@@ -18,6 +18,11 @@ struct ViewDragonTypeDetail: View {
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \DragondexEntry.id, ascending: true)])
     private var allDragondexEntries: FetchedResults<DragondexEntry>
     
+    
+    //pull all the other dragons
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \DragondexEntry.id, ascending: true)])
+    private var filteredDragondexEntries: FetchedResults<DragondexEntry>
+    
     var body: some View {
         GeometryReader { geo in
             ZStack {
@@ -36,24 +41,30 @@ struct ViewDragonTypeDetail: View {
                                 .padding()
                             VStack {
                                 ForEach(DragonStruct.DragonPattern.allCases.dropLast()) { pattern in
+                                    let percentageComplete = returnPercentageComplete(type: type, pattern: pattern.rawValue)
+                                    let percentageString = String(format: "%.2f", percentageComplete)
+                                    
                                     NavigationLink {
                                         ViewDragonPatternDetail(type: type, pattern: pattern.rawValue).environment(\.managedObjectContext, viewContext)
                                     } label: {
                                         HStack {
-                                            AsyncImage(url: returnImageURL(forType: type, forPattern: pattern.rawValue)) { image in
-                                                image
-                                                    .resizable()
-                                                    .scaledToFit()
-                                                    .frame(width: 150, height: 150)
-                                                    .shadow(color: .white, radius: 2)
-                                            } placeholder: {
-                                                ProgressView()
+                                            VStack {
+                                                AsyncImage(url: returnImageURL(forType: type, forPattern: pattern.rawValue)) { image in
+                                                    image
+                                                        .resizable()
+                                                        .scaledToFit()
+                                                        .frame(width: 150, height: 150)
+                                                        .shadow(color: .white, radius: 2)
+                                                } placeholder: {
+                                                    ProgressView()
+                                                }
+                                                Text("\(percentageString)% Complete")
                                             }
                                             Spacer()
                                             Text("\(pattern) \(type)s")
                                                 .font(.title)
                                         }
-                                        .padding()
+                                        .padding(.horizontal)
                                         Spacer()
                                     }
                                 }
@@ -70,6 +81,28 @@ struct ViewDragonTypeDetail: View {
             .frame(width: geo.size.width, height: geo.size.height)
             //.navigationBarBackButtonHidden()
         }
+    }
+    
+    func returnPercentageComplete(type dragonType: String, pattern dragonPattern: String) -> Double {
+        let totalNumberOfDragonsPerColor: Double = Double(DragonStruct.SecondaryColor.allCases.dropLast().count * DragonStruct.MainColor.allCases.dropLast().count)
+        var numberOfOwnedDragons: Double = 0
+        
+        var dynamicPredicate: NSPredicate {
+            var predicates : [NSPredicate] = []
+            
+            //search predicate
+            predicates.append(NSPredicate(format: "type contains[c] %@", dragonType))
+            predicates.append(NSPredicate(format: "pattern contains[c] %@", dragonPattern))
+            
+            //combine predicate and return
+            return NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+        }
+        
+        filteredDragondexEntries.nsPredicate = dynamicPredicate
+        
+        numberOfOwnedDragons = Double(filteredDragondexEntries.count)
+        
+        return (numberOfOwnedDragons / totalNumberOfDragonsPerColor) * 100
     }
         
     func dragonPresentInDragondex(type dragonType: String, pattern dragonPattern: String) -> Bool {

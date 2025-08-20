@@ -18,6 +18,9 @@ struct ViewDragonPatternDetail: View {
     //pull all the other dragons
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \DragondexEntry.id, ascending: true)])
     private var allDragondexEntries: FetchedResults<DragondexEntry>
+    //pull all the other dragons
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \DragondexEntry.id, ascending: true)])
+    private var filteredDragondexEntries: FetchedResults<DragondexEntry>
     
     var body: some View {
         GeometryReader { geo in
@@ -40,23 +43,29 @@ struct ViewDragonPatternDetail: View {
                             ScrollView {
                                 VStack {
                                     ForEach(DragonStruct.MainColor.allCases.dropLast()) { color in
+                                        let percentageComplete = returnPercentageComplete(type: type, pattern: pattern, color: color.rawValue)
+                                        let percentageString = String(format: "%.2f", percentageComplete)
+                                        
                                         NavigationLink {
                                             ViewDragonColorDetail(type: type, pattern: pattern, color: color.rawValue).environment(\.managedObjectContext, viewContext)
                                         } label: {
                                             HStack {
-                                                AsyncImage(url: returnImageURL(forType: type, forPattern: pattern, forColor: color.rawValue)) { image in
-                                                    image
-                                                        .resizable()
-                                                        .scaledToFit()
-                                                        .frame(width: 150, height: 150)
-                                                        .shadow(color: .white, radius: 2)
-                                                } placeholder: {
-                                                    ProgressView()
+                                                VStack {
+                                                    AsyncImage(url: returnImageURL(forType: type, forPattern: pattern, forColor: color.rawValue)) { image in
+                                                        image
+                                                            .resizable()
+                                                            .scaledToFit()
+                                                            .frame(width: 150, height: 150)
+                                                            .shadow(color: .white, radius: 2)
+                                                    } placeholder: {
+                                                        ProgressView()
+                                                    }
+                                                    Text("\(percentageString) % Complete")
                                                 }
                                                 Spacer()
                                                 Text("\(pattern) \(color) \(type)s").font(.title)
                                             }
-                                            .padding()
+                                            .padding(.horizontal)
                                             Spacer()
                                         }
                                     }
@@ -72,8 +81,30 @@ struct ViewDragonPatternDetail: View {
                 .frame(width: geo.size.width, height: geo.size.height)
             }
             .frame(width: geo.size.width, height: geo.size.height)
-            //.navigationBarBackButtonHidden()
         }
+    }
+    
+    func returnPercentageComplete(type dragonType: String, pattern dragonPattern: String, color dragonColor: String) -> Double {
+        let totalNumberOfDragonsPerColor: Double = Double(DragonStruct.SecondaryColor.allCases.dropLast().count)
+        var numberOfOwnedDragons: Double = 0
+        
+        var dynamicPredicate: NSPredicate {
+            var predicates : [NSPredicate] = []
+            
+            //search predicate
+            predicates.append(NSPredicate(format: "type contains[c] %@", dragonType))
+            predicates.append(NSPredicate(format: "pattern contains[c] %@", dragonPattern))
+            predicates.append(NSPredicate(format: "mainColor contains[c] %@", dragonColor))
+            
+            //combine predicate and return
+            return NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+        }
+        
+        filteredDragondexEntries.nsPredicate = dynamicPredicate
+        
+        numberOfOwnedDragons = Double(filteredDragondexEntries.count)
+        
+        return (numberOfOwnedDragons / totalNumberOfDragonsPerColor) * 100
     }
     
     func dragonPresentInDragondex(type dragonType: String, pattern dragonPattern: String, color dragonColor: String) -> Bool {
@@ -89,9 +120,9 @@ struct ViewDragonPatternDetail: View {
             return NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
         }
         
-        allDragondexEntries.nsPredicate = dynamicPredicate
+        filteredDragondexEntries.nsPredicate = dynamicPredicate
         
-        if allDragondexEntries.count > 0 { return true }
+        if filteredDragondexEntries.count > 0 { return true }
         else { return false }
     }
     

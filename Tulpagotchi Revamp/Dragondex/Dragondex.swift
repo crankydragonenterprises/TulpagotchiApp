@@ -15,7 +15,9 @@ struct Dragondex: View {
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \DragondexEntry.id, ascending: true)])
     private var allDragondexEntries: FetchedResults<DragondexEntry> 
     
-    
+    //pull all the other dragons
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \DragondexEntry.id, ascending: true)])
+    private var filteredDragondexEntries: FetchedResults<DragondexEntry>
     
     var body: some View {
         GeometryReader { geo in
@@ -36,18 +38,24 @@ struct Dragondex: View {
                                 ScrollView {
                                     VStack {
                                         ForEach(DragonStruct.DragonType.allCases.dropLast()) {type in
+                                            let percentageComplete = returnPercentageComplete(type: type.rawValue)
+                                            let percentageString = String(format: "%.2f", percentageComplete)
+                                            
                                             NavigationLink {
                                                 ViewDragonTypeDetail(type: type.rawValue).environment(\.managedObjectContext, viewContext)
                                             } label: {
                                                 HStack {
-                                                    AsyncImage(url: returnImageURL(for: type.rawValue)) { image in
-                                                        image
-                                                            .resizable()
-                                                            .scaledToFit()
-                                                            .frame(width: 150, height: 150)
-                                                            .shadow(color: .white, radius: 2)
-                                                    } placeholder: {
-                                                        ProgressView()
+                                                    VStack {
+                                                        AsyncImage(url: returnImageURL(for: type.rawValue)) { image in
+                                                            image
+                                                                .resizable()
+                                                                .scaledToFit()
+                                                                .frame(width: 150, height: 150)
+                                                                .shadow(color: .white, radius: 2)
+                                                        } placeholder: {
+                                                            ProgressView()
+                                                        }
+                                                        Text("\(percentageString)% Complete")
                                                     }
                                                     Spacer()
                                                     Text("\(type)")
@@ -74,6 +82,28 @@ struct Dragondex: View {
             }
         }
     }
+    
+    func returnPercentageComplete(type dragonType: String) -> Double {
+        let totalNumberOfDragonsPerColor: Double = Double(DragonStruct.SecondaryColor.allCases.dropLast().count * DragonStruct.MainColor.allCases.dropLast().count * DragonStruct.DragonPattern.allCases.dropLast().count)
+        var numberOfOwnedDragons: Double = 0
+        
+        var dynamicPredicate: NSPredicate {
+            var predicates : [NSPredicate] = []
+            
+            //search predicate
+            predicates.append(NSPredicate(format: "type contains[c] %@", dragonType))
+            
+            //combine predicate and return
+            return NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+        }
+        
+        filteredDragondexEntries.nsPredicate = dynamicPredicate
+        
+        numberOfOwnedDragons = Double(filteredDragondexEntries.count)
+        
+        return (numberOfOwnedDragons / totalNumberOfDragonsPerColor) * 100
+    }
+    
     func dragonPresentInDragondex(_ dragonType: String) -> Bool {
         var dynamicPredicate: NSPredicate {
             var predicates : [NSPredicate] = []
@@ -92,9 +122,7 @@ struct Dragondex: View {
     }
     
     func returnImageURL (for dragonType: String) -> URL {
-//        print("dragondex for \(dragonType): alldragondexentries: \(allDragondexEntries.count)")
-//        if Utilities.dragonPresentInDragondex(context: viewContext, dragondex: allDragondexEntries, dragonType: dragonType) {
-//            print(dragonType)
+        
         if dragonPresentInDragondex(dragonType) {
             return URL(string: "\(Constants.imageBaseUrl)/images/tulpagotchi-images/\(dragonType)/Basic/Basic_Baby/Basic_Baby_Black_White.png")!
         } else {
