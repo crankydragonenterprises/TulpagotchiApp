@@ -91,12 +91,11 @@ struct Dashboard: View {
                     
                     //level progress view
                     VStack (alignment: .leading) {
-                        DashboardProgressView(title: "Level Progress", progressLevel: progressLevel)
-                        
+                        DashboardProgressView(title: "Level Progress", progressCeiling: Int(user.first?.levelCeiling ?? 0), progress: Int(user.first?.level ?? 0), progressLevel: progressLevel)
                         Text("Level \(user[0].level)")
                         
                         //daily progress view
-                        DashboardProgressView(title: "Daily Progress", progressLevel: dailyProgressPercentage)
+                        DashboardProgressView(title: "Daily Progress", progressCeiling: Int(user.first?.dailyGoal ?? 0), progress: Int(user.first?.dailyProgress ?? 0), progressLevel: dailyProgressPercentage)
                         
                         //coins
                         Text("Coins: \(user[0].coins)")
@@ -199,18 +198,22 @@ struct Dashboard: View {
         }
         .navigationBarBackButtonHidden(true)
     }
-    
     struct DashboardProgressView: View {
         let title: String
+        let progressCeiling: Int
+        let progress: Int
         @State var progressLevel: Double
         
         var body: some View {
             HStack {
                 Text(title)
-                ProgressView(value: progressLevel)
-                    .border(.black, width: 0.1)
-                    .scaleEffect(y:6)
-                    .tint(.green)
+                ZStack {
+                    ProgressView(value: progressLevel)
+                        .border(.black, width: 0.1)
+                        .scaleEffect(y:6)
+                        .tint(.green)
+                    Text("\(progress) / \(progressCeiling)")
+                }
             }
         }
     }
