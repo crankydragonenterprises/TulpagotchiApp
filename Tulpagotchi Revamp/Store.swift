@@ -107,7 +107,6 @@ struct Store: View {
         }
         .onAppear {
             usersCoins = Int(users.first?.coins ?? 0)
-            print("usersCoins: \(usersCoins)")
             
             let today = Calendar.current.startOfDay(for: Date())
             
@@ -128,8 +127,6 @@ struct Store: View {
     }
     
     func makeDragonStructsFromCoreDataStoreDragon () -> [DragonStruct] {
-        //print("making the store dragons for display")
-        
         var dragons : [DragonStruct] = []
         
         for dragon in storeDragons {
@@ -208,8 +205,6 @@ struct Store: View {
     
     func buyDragon(_ dragon: DragonStruct) {
         
-        print("Buying \(dragon) for \(dragon.dragonSellingPrice) coins out of \(usersCoins)")
-        
         //make a new Dragon
         let newDragon = Dragon(context: viewContext)
         newDragon.id = Utilities.generateRandomGuid(length: 10)
@@ -227,7 +222,6 @@ struct Store: View {
         
         //check the dragondex for the new dragon and add it if not
         if !dragonPresentInDragondex(type: newDragon.dragonType!, pattern: newDragon.dragonPattern!, color: newDragon.dragonMain!, secondColor: newDragon.dragonSecond!) {
-            //print("new dragon not present in dragondex")
             
             let newDragondexEntry = DragondexEntry(context: viewContext)
             newDragondexEntry.id = Int16(allDragondexEntries.count + 1)
@@ -236,19 +230,14 @@ struct Store: View {
             newDragondexEntry.mainColor = newDragon.dragonMain!
             newDragondexEntry.secondColor = newDragon.dragonSecond!
             
-            //print("\(newDragondexEntry)")
         }
         
         //save the context
         do {
             try viewContext.save()
-            //print("Saved!")
-            //print("User's Coins: \(users.first!.coins)")
         } catch {
             print(error)
         }
-        
-        //return to the Dashboard
     }
 }
 

@@ -42,12 +42,12 @@ struct Footer: View {
 //                } label : {
 //                    FooterIcon(imageName: "person.fill")
 //                }
-//                Spacer()
-//                NavigationLink {
-//                    Information()
-//                } label : {
-//                    FooterIcon(imageName: "info.circle.fill")
-//                }
+                Spacer()
+                NavigationLink {
+                    Information().environment(\.managedObjectContext, viewContext)
+                } label : {
+                    FooterIcon(imageName: "info.circle.fill", darkMode: darkMode)
+                }
             }
             .background(.clear)
             .padding()
