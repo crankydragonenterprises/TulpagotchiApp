@@ -36,12 +36,12 @@ struct Footer: View {
                 } label: {
                     FooterIcon(imageName: "cart.fill", darkMode: darkMode)
                 }
-//                Spacer()
-//                NavigationLink {
-//                    Preferences()
-//                } label : {
-//                    FooterIcon(imageName: "person.fill")
-//                }
+                Spacer()
+                NavigationLink {
+                    Preferences().environment(\.managedObjectContext, viewContext)
+                } label : {
+                    FooterIcon(imageName: "person.fill", darkMode: darkMode)
+                }
                 Spacer()
                 NavigationLink {
                     Information().environment(\.managedObjectContext, viewContext)
