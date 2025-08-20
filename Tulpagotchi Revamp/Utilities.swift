@@ -290,15 +290,31 @@ enum Utilities {
         print("Sold dragon...")
     }
     
-//    static func sellDragon<Dragon: NSManagedObject>(context: NSManagedObjectContext, dragonToSell: Dragon) {
-//        context.delete(dragonToSell)
+//    //check for dragons in the dragondex
+//    @MainActor static func dragonPresentInDragondex(
+//        context: NSManagedObjectContext,
+//        dragondex: FetchedResults<DragondexEntry>,
+//        dragonType: String) -> Bool {
+//        //pull all the other dragons
+//        //@FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \DragondexEntry.id, ascending: true)])
+//        //var allDragondexEntries: FetchedResults<DragondexEntry>
 //        
-//        do {
-//            try context.save()
-//            print("Successfully deleted object: \(dragonToSell)")
-//        } catch {
-//            context.rollback()
-//            print("Failed to delete object: \(error.localizedDescription)")
+//        print("Calling method... dragondex for \(dragonType): \(dragondex.count)")
+//        
+//        var dynamicPredicate: NSPredicate {
+//            var predicates : [NSPredicate] = []
+//            
+//            //search predicate
+//            predicates.append(NSPredicate(format: "type contains[c] %@", dragonType))
+//            
+//            //combine predicate and return
+//            return NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
 //        }
+//        
+//        dragondex.nsPredicate = dynamicPredicate
+//        
+//        
+//        if dragondex.count > 0 { return true }
+//        else { return false }
 //    }
 }

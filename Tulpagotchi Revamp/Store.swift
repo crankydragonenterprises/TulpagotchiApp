@@ -29,8 +29,15 @@ struct Store: View {
         animation: .default)
     private var storeDragons: FetchedResults<StoreDragon>
     
+    //pull all the other dragons
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \DragondexEntry.id, ascending: true)])
+    private var allDragondexEntries: FetchedResults<DragondexEntry>
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \DragondexEntry.id, ascending: true)])
+    private var filteredDragondexEntries: FetchedResults<DragondexEntry>
+    
     @State private var dragonStructDragonsForStore: [DragonStruct] = []
     @State private var usersCoins: Int = 0
+    @State private var returnToDashboard = false
     
     var body: some View {
         GeometryReader { geo in
@@ -49,13 +56,16 @@ struct Store: View {
                         Color (.white).opacity(0.6)
                         VStack {
                             //three random dragons per day
-                            ForEach(dragonStructDragonsForStore) { dragon in
+                            ForEach(dragonStructDragonsForStore, id: \.id) { dragon in
                                 let dragonPrice: Int = dragon.dragonSellingPrice
                                 let canAffordDragon = dragonPrice <= usersCoins
                                 let bg: Color = canAffordDragon ? .green : .gray
+                                let imageURL = dragon.dragonImageLocation
+                                let buttonLabel = "Buy for \(dragon.dragonSellingPrice) coins"
+                                
                                 HStack {
                                     VStack {
-                                        AsyncImage(url: dragon.dragonImageLocation) { image in
+                                        AsyncImage(url: imageURL) { image in
                                             image
                                                 .resizable()
                                                 .scaledToFit()
@@ -69,8 +79,9 @@ struct Store: View {
                                     Button {
                                         //buy the dragon
                                         buyDragon(dragon)
+                                        returnToDashboard = true
                                     } label : {
-                                        Text("Buy for \(dragon.dragonSellingPrice) coins")
+                                        Text(buttonLabel)
                                     }
                                     .padding()
                                     .background(bg)
@@ -78,6 +89,7 @@ struct Store: View {
                                     .clipShape(.capsule)
                                     .disabled(!canAffordDragon)
                                 }
+                                
                             }
                         }
                         .padding()
@@ -86,6 +98,9 @@ struct Store: View {
                     Footer()
                 }
                 .frame(width: geo.size.width, height: geo.size.height)
+                .navigationDestination(isPresented: $returnToDashboard) {
+                    Dashboard().environment(\.managedObjectContext, viewContext)
+                }
             }
             .frame(width: geo.size.width, height: geo.size.height)
             .navigationBarBackButtonHidden(true)
@@ -171,11 +186,69 @@ struct Store: View {
         
     }
     
+    func dragonPresentInDragondex(type dragonType: String, pattern dragonPattern: String, color dragonColor: String, secondColor dragonSecondary: String) -> Bool {
+        var dynamicPredicate: NSPredicate {
+            var predicates : [NSPredicate] = []
+            
+            //search predicate
+            predicates.append(NSPredicate(format: "type contains[c] %@", dragonType))
+            predicates.append(NSPredicate(format: "pattern contains[c] %@", dragonPattern))
+            predicates.append(NSPredicate(format: "mainColor contains[c] %@", dragonColor))
+            predicates.append(NSPredicate(format: "secondColor contains[c] %@", dragonSecondary))
+            
+            //combine predicate and return
+            return NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+        }
+        
+        filteredDragondexEntries.nsPredicate = dynamicPredicate
+        
+        if filteredDragondexEntries.count > 0 { return true }
+        else { return false }
+    }
+    
     func buyDragon(_ dragon: DragonStruct) {
         
-        print("Buying \(dragon)")
+        print("Buying \(dragon) for \(dragon.dragonSellingPrice) coins out of \(usersCoins)")
         
+        //make a new Dragon
+        let newDragon = Dragon(context: viewContext)
+        newDragon.id = Utilities.generateRandomGuid(length: 10)
+        newDragon.dragonType = dragon.dragonType.rawValue
+        newDragon.dragonPattern = dragon.dragonPattern.rawValue
+        newDragon.dragonMain = dragon.dragonMain.rawValue
+        newDragon.dragonSecond = dragon.dragonSecond.rawValue
+        newDragon.dragonAge = "Egg"
+        newDragon.dragonImageLocation = Utilities.returnImageLocation(dragon: newDragon)
+        newDragon.dragonSellingPrice = Utilities.returnSellingPrice(dragon: newDragon)
+        newDragon.dragonCloningPrice = Int16(DragonStruct.returnCloningPrice(type: dragon.dragonType, pattern: dragon.dragonPattern, color: dragon.dragonMain, secondColor: dragon.dragonSecond))
         
+        //remove the dragon's price from the user's coins
+        users.first!.coins -= Int64(dragon.dragonSellingPrice)
+        
+        //check the dragondex for the new dragon and add it if not
+        if !dragonPresentInDragondex(type: newDragon.dragonType!, pattern: newDragon.dragonPattern!, color: newDragon.dragonMain!, secondColor: newDragon.dragonSecond!) {
+            //print("new dragon not present in dragondex")
+            
+            let newDragondexEntry = DragondexEntry(context: viewContext)
+            newDragondexEntry.id = Int16(allDragondexEntries.count + 1)
+            newDragondexEntry.type = newDragon.dragonType!
+            newDragondexEntry.pattern = newDragon.dragonPattern!
+            newDragondexEntry.mainColor = newDragon.dragonMain!
+            newDragondexEntry.secondColor = newDragon.dragonSecond!
+            
+            //print("\(newDragondexEntry)")
+        }
+        
+        //save the context
+        do {
+            try viewContext.save()
+            //print("Saved!")
+            //print("User's Coins: \(users.first!.coins)")
+        } catch {
+            print(error)
+        }
+        
+        //return to the Dashboard
     }
 }
 

@@ -381,7 +381,7 @@ struct WritingPage: View {
             //check if the new dragon is in the dragondex; add it if not
             if !dragonPresentInDragondex(type: newDragon.dragonType!, pattern: newDragon.dragonPattern!, color: newDragon.dragonMain!, secondColor: newDragon.dragonSecond!) {
                 
-                print("dragondex Count: \(allDragondexEntries.count)")
+                //print("dragondex Count: \(allDragondexEntries.count)")
                 
                 let newDragondexEntry = DragondexEntry(context: viewContext)
                 newDragondexEntry.id = Int16(allDragondexEntries.count + 1)

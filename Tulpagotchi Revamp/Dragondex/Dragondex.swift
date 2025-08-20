@@ -92,6 +92,9 @@ struct Dragondex: View {
     }
     
     func returnImageURL (for dragonType: String) -> URL {
+//        print("dragondex for \(dragonType): alldragondexentries: \(allDragondexEntries.count)")
+//        if Utilities.dragonPresentInDragondex(context: viewContext, dragondex: allDragondexEntries, dragonType: dragonType) {
+//            print(dragonType)
         if dragonPresentInDragondex(dragonType) {
             return URL(string: "\(Constants.imageBaseUrl)/images/tulpagotchi-images/\(dragonType)/Basic/Basic_Baby/Basic_Baby_Black_White.png")!
         } else {
