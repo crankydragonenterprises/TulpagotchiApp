@@ -14,7 +14,7 @@ struct Information: View {
     var body: some View {
         GeometryReader {geo in
             ZStack {
-                Image(.rainbow6)
+                Image(.rainbow1)
                     .resizable()
                     .scaledToFill()
                     .opacity(0.6)
@@ -23,6 +23,7 @@ struct Information: View {
                     HStack (alignment: .bottom) {
                         Text("Information")
                             .font(.largeTitle)
+                            .fontWeight(.bold)
                     }
                     Spacer(minLength: 450)
                     

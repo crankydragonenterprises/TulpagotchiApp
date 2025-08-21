@@ -27,6 +27,19 @@ struct Preferences: View {
                     Text("Under Construction")
                     
                     Spacer()
+                    HStack {
+                        Spacer()
+                        Button {
+                            //export the project data
+                        } label: {
+                            Text("Export Data")
+                        }
+                        .padding()
+                        .background(.blue)
+                        .foregroundColor(.white)
+                        .clipShape(.capsule)
+                        .padding(.horizontal, 25)
+                    }
                     Footer()
                 }
                 .frame(width: geo.size.width, height: geo.size.height)

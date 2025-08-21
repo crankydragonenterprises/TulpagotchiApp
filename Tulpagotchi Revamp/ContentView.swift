@@ -7,6 +7,8 @@
 
 import SwiftUI
 import CoreData
+import Network
+import Combine
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -15,9 +17,6 @@ struct ContentView: View {
         sortDescriptors: [NSSortDescriptor(keyPath: \User.id, ascending: true)],
         animation: .default)
     private var users: FetchedResults<User>
-//    private var user: User? {
-//        users.isEmpty ? nil : users[0]
-//    }
     
     @FetchRequest(
         sortDescriptors: [
@@ -30,54 +29,76 @@ struct ContentView: View {
     
     private let randomDragon: DragonStruct =
         DragonStruct.returnRandomDragon(age: DragonStruct.DragonAge.Baby, highestType: DragonStruct.DragonType.Dragon, highestPattern: DragonStruct.DragonPattern.Basic)
-    
 
+    @EnvironmentObject var net: NetworkMonitor
+    
     var body: some View {
-        if(dragons.count == 0 && users.count == 0) {
-            GeometryReader { geo in
-                ZStack {
-                    Image(.rainbow1)
-                        .resizable()
-                        .frame(width: geo.size.width, height: geo.size.height * 1.125)
-                        .opacity(0.4)
-                        .ignoresSafeArea()
-                    
-                    ContentUnavailableView {
-                        Label("What is your name", systemImage: "questionmark.circle.fill")
-                    } description: {
-                        VStack {
-                            AsyncImage(url: randomDragon.dragonImageLocation)
-                            { image in
-                                image
-                                    .resizable()
-                                    .scaledToFit()
-                                    .padding()
-                                    .shadow(color: .white, radius: 2)
-                            } placeholder: {
-                                ProgressView()
-                            }
-                            
-                            TextField("Enter name here", text: $userName)
-                                .textFieldStyle(.roundedBorder)        // modern style
-                                .textInputAutocapitalization(.never)   // optional customization
-                                .autocorrectionDisabled(true)
-                                .padding(.horizontal, 50)
-                        }
+        if !net.isConnected {
+            ZStack {
+                Color (.red)
+                    .opacity(0.4)
+                    .ignoresSafeArea()
+                VStack {
+                    Spacer()
+                    Text("Tulpagotchi requires\nan internet connection.\nPlease connect to the internet\nand try again later.\n\n\(net.isConnected ? "Connected" : "Not Connected")")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
                         .padding()
-                    } actions: {
-                        if !userName.isEmpty {
-                            Button ("Get your first dragons", systemImage: "lizard.fill") {
-                                saveNewUser(newUserName: userName)
-                            }
-                            .buttonStyle(.borderedProminent)
-                        }
-                    }
+                        .multilineTextAlignment(.center)
+                    Spacer()
+                    Text("Having a hard time?\nContact us at\nsupport@crankydragonenterprises.com")
+                        .multilineTextAlignment(.center)
+                    Spacer()
                 }
             }
         }
         else {
-            Dashboard()
-                .environment(\.managedObjectContext, viewContext)
+            if(dragons.count == 0 && users.count == 0) {
+                GeometryReader { geo in
+                    ZStack {
+                        Image(.rainbow1)
+                            .resizable()
+                            .frame(width: geo.size.width, height: geo.size.height * 1.125)
+                            .opacity(0.4)
+                            .ignoresSafeArea()
+                        
+                        ContentUnavailableView {
+                            Label("What is your name", systemImage: "questionmark.circle.fill")
+                        } description: {
+                            VStack {
+                                AsyncImage(url: randomDragon.dragonImageLocation)
+                                { image in
+                                    image
+                                        .resizable()
+                                        .scaledToFit()
+                                        .padding()
+                                        .shadow(color: .white, radius: 2)
+                                } placeholder: {
+                                    ProgressView()
+                                }
+                                
+                                TextField("Enter name here", text: $userName)
+                                    .textFieldStyle(.roundedBorder)        // modern style
+                                    .textInputAutocapitalization(.never)   // optional customization
+                                    .autocorrectionDisabled(true)
+                                    .padding(.horizontal, 50)
+                            }
+                            .padding()
+                        } actions: {
+                            if !userName.isEmpty {
+                                Button ("Get your first dragons", systemImage: "lizard.fill") {
+                                    saveNewUser(newUserName: userName)
+                                }
+                                .buttonStyle(.borderedProminent)
+                            }
+                        }
+                    }
+                }
+            }
+            else {
+                Dashboard()
+                    .environment(\.managedObjectContext, viewContext)
+            }
         }
     }
     
@@ -144,6 +165,37 @@ struct ContentView: View {
     }
 }
 
+@MainActor
+final class NetworkMonitor: ObservableObject {
+    private let monitor = NWPathMonitor()
+    private let queue = DispatchQueue(label: "NetworkMonitor")
+    
+    @Published private(set) var status: NWPath.Status = .requiresConnection
+    @Published private(set) var interface: NWInterface.InterfaceType?
+    @Published private(set) var isExpensive = false
+    @Published private(set) var isConstrained = false
+    
+    var isConnected: Bool { status == .satisfied }
+    
+    init() {
+        monitor.pathUpdateHandler = { [weak self] path in
+            DispatchQueue.main.async {
+                self?.status = path.status
+                self?.isExpensive = path.isExpensive
+                self?.isConstrained = path.isConstrained
+                self?.interface = [.wifi, .cellular, .wiredEthernet, .other]
+                    .first { path.usesInterfaceType($0) }
+            }
+        }
+        monitor.start(queue: queue)
+    }
+    
+    deinit { monitor.cancel() }
+}
+
+
 #Preview {
-    ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+    ContentView()
+        .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        .environmentObject(NetworkMonitor())
 }
