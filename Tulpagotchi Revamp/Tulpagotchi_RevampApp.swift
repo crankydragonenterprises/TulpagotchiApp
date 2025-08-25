@@ -15,6 +15,7 @@ struct Tulpagotchi_RevampApp: App {
         WindowGroup {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .environmentObject(NetworkMonitor())
         }
     }
 }

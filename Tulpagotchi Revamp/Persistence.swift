@@ -51,19 +51,32 @@ struct PersistenceController {
         newProject.name = "Test Project"
         newProject.totalWords = 50
         
+        let newProject2 = Project(context: viewContext)
+        newProject2.id = 2
+        newProject2.name = "Test Project 2"
+        newProject2.totalWords = 50
+        
         let newEntry = Entry(context: viewContext)
         newEntry.text = "Hello, world!"
         newEntry.id = 1
         newEntry.projectID = 1
+        let newEntry2 = Entry(context: viewContext)
+        newEntry2.text = "Hello, world! Again"
+        newEntry2.id = 2
+        newEntry2.projectID = 1
+        let newEntry3 = Entry(context: viewContext)
+        newEntry3.text = "Hello, world! A third time"
+        newEntry3.id = 3
+        newEntry3.projectID = 2
         
         let newUser = User(context: viewContext)
         newUser.id = "Test User"
         newUser.level = 1
         newUser.levelFloor = 0
         newUser.levelCeiling = 100
-        newUser.currentLevel = 37
+        newUser.currentLevel = 0
         newUser.dailyGoal = 200
-        newUser.dailyProgress = 50
+        newUser.dailyProgress = 0
         newUser.coins = 7500
         newUser.highestTypeAllowed = "Dragon"
         newUser.highestPatternAllowed = "Mottled"

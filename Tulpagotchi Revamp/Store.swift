@@ -10,6 +10,7 @@ import SwiftUI
 struct Store: View {
     
     @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.colorScheme) private var scheme
     
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \AppSettings.id, ascending: true)],
@@ -53,7 +54,7 @@ struct Store: View {
                         .font(.largeTitle)
                         .fontWeight(.bold)
                     ZStack {
-                        Color (.white).opacity(0.6)
+                        Color (scheme == .dark ? .black : .white).opacity(0.6)
                         VStack {
                             //three random dragons per day
                             ForEach(dragonStructDragonsForStore, id: \.id) { dragon in

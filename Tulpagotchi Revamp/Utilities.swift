@@ -289,32 +289,4 @@ enum Utilities {
         }
         print("Sold dragon...")
     }
-    
-//    //check for dragons in the dragondex
-//    @MainActor static func dragonPresentInDragondex(
-//        context: NSManagedObjectContext,
-//        dragondex: FetchedResults<DragondexEntry>,
-//        dragonType: String) -> Bool {
-//        //pull all the other dragons
-//        //@FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \DragondexEntry.id, ascending: true)])
-//        //var allDragondexEntries: FetchedResults<DragondexEntry>
-//        
-//        print("Calling method... dragondex for \(dragonType): \(dragondex.count)")
-//        
-//        var dynamicPredicate: NSPredicate {
-//            var predicates : [NSPredicate] = []
-//            
-//            //search predicate
-//            predicates.append(NSPredicate(format: "type contains[c] %@", dragonType))
-//            
-//            //combine predicate and return
-//            return NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
-//        }
-//        
-//        dragondex.nsPredicate = dynamicPredicate
-//        
-//        
-//        if dragondex.count > 0 { return true }
-//        else { return false }
-//    }
 }

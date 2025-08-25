@@ -178,12 +178,6 @@ struct WritingPage: View {
                     // Goal not ready yet? Show indeterminate until it is.
                     ProgressView()
                 }
-//                //Progress Bar
-//                ProgressView(value: wordCountProgress)
-//                    .scaleEffect(y:6)
-//                    .tint(.green)
-//                    .padding()
-                
                 Button {
                     eggsGained = returnNumberOfEggs()
                     coinsGained = returnCoinsEarned()
@@ -302,6 +296,8 @@ struct WritingPage: View {
         let user = users[0]
         user.coins += Int64(coinsGained)
         user.currentLevel += Int64(wordCount)
+        user.dailyProgress += Int64(wordCount)
+        
         // check if the current level is above the level ceiling
         if user.currentLevel >= user.levelCeiling {
             user.level += 1

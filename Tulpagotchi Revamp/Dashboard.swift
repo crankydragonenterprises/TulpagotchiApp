@@ -11,6 +11,7 @@ import CoreData
 struct Dashboard: View {
     
     @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.colorScheme) private var scheme
     
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \User.id, ascending: true)],
@@ -55,7 +56,7 @@ struct Dashboard: View {
         guard let u = user.first else { return 0 } // no user yet
         let denom = Double(u.levelCeiling) - Double(u.levelFloor)
         guard denom > 0 else { return 0 }
-        return Double(u.level) / denom
+        return Double(u.currentLevel) / denom
     }
     
     var dailyProgressPercentage: Double {
@@ -91,7 +92,7 @@ struct Dashboard: View {
                     
                     //level progress view
                     VStack (alignment: .leading) {
-                        DashboardProgressView(title: "Level Progress", progressCeiling: Int(user.first?.levelCeiling ?? 0), progress: Int(user.first?.level ?? 0), progressLevel: progressLevel)
+                        DashboardProgressView(title: "Level Progress", progressCeiling: Int(user.first?.levelCeiling ?? 0), progress: Int(user.first?.currentLevel ?? 0), progressLevel: progressLevel)
                         Text("Level \(user[0].level)")
                         
                         //daily progress view
@@ -101,7 +102,7 @@ struct Dashboard: View {
                         Text("Coins: \(user[0].coins)")
                     }
                     .padding()
-                    .background(.white.opacity(0.5))
+                    .background(scheme == .dark ? Color.black.opacity(0.5) : Color.white.opacity(0.5))
                     
                     //Filters
                     HStack
@@ -114,6 +115,7 @@ struct Dashboard: View {
                             }
                         } label: {
                             Text("Type")
+                                .fontWeight(.bold)
                         }
                         .onChange(of: selectedType) {
                             dragons.nsPredicate = dynamicPredicate
@@ -127,6 +129,7 @@ struct Dashboard: View {
                             }
                         } label: {
                             Text("Pattern")
+                                .fontWeight(.bold)
                         }
                         .onChange(of: selectedPattern) {
                             dragons.nsPredicate = dynamicPredicate
@@ -140,6 +143,7 @@ struct Dashboard: View {
                             }
                         } label: {
                             Text("Color")
+                                .fontWeight(.bold)
                         }
                         .onChange(of: selectedColor) {
                             dragons.nsPredicate = dynamicPredicate
@@ -153,19 +157,20 @@ struct Dashboard: View {
                             }
                         } label: {
                             Text("Age")
+                                .fontWeight(.bold)
                         }
                         .onChange(of: selectedAge) {
                             dragons.nsPredicate = dynamicPredicate
                         }
                     }
                     .padding()
-                    .background(.white)
-                    .foregroundStyle(.black)
+                    .background(scheme == .dark ? Color.black : Color.white)
+                    .foregroundStyle(scheme == .dark ? Color.white : Color.black)
                     .opacity(0.50)
                     
                     //Dragon Area
                     ZStack {
-                        Color(.white).opacity(0.5)
+                        Color(scheme == .dark ? .gray : .white).opacity(0.5)
                         ScrollView {
                             LazyVGrid(columns: [GridItem(), GridItem(), GridItem()])
                             {

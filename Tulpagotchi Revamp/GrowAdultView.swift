@@ -10,7 +10,6 @@ import CoreData
 
 struct GrowAdultView: View {
     @Environment(\.managedObjectContext) private var viewContext
-    
     @EnvironmentObject private var dragon: Dragon
     
     //pull all the other dragons
