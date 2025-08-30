@@ -19,6 +19,14 @@ struct Dashboard: View {
     private var user: FetchedResults<User>
     
     @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \AppSettings.id, ascending: true)],
+        animation: .default)
+    private var appSettings: FetchedResults<AppSettings>
+    private var lastUpdatedDashboard : Date? {
+        appSettings.first?.lastUpdatedDashboard
+    }
+    
+    @FetchRequest(
         sortDescriptors: [
             NSSortDescriptor(keyPath: \Dragon.dragonAge, ascending: true),
             NSSortDescriptor(keyPath: \Dragon.dragonPattern, ascending: true),
@@ -92,11 +100,21 @@ struct Dashboard: View {
                     
                     //level progress view
                     VStack (alignment: .leading) {
-                        DashboardProgressView(title: "Level Progress", progressCeiling: Int(user.first?.levelCeiling ?? 0), progress: Int(user.first?.currentLevel ?? 0), progressLevel: progressLevel)
+                        DashboardProgressView(
+                            title: "Level Progress",
+                            progressCeiling: Int(user.first?.levelCeiling ?? 0),
+                            progressFloor: Int(user.first?.levelFloor ?? 0),
+                            progress: Int(user.first?.currentLevel ?? 0),
+                            progressLevel: progressLevel)
                         Text("Level \(user[0].level)")
                         
                         //daily progress view
-                        DashboardProgressView(title: "Daily Progress", progressCeiling: Int(user.first?.dailyGoal ?? 0), progress: Int(user.first?.dailyProgress ?? 0), progressLevel: dailyProgressPercentage)
+                        DashboardProgressView(
+                            title: "Daily Progress",
+                            progressCeiling: Int(user.first?.dailyGoal ?? 0),
+                            progressFloor: 0,
+                            progress: Int(user.first?.dailyProgress ?? 0),
+                            progressLevel: dailyProgressPercentage)
                         
                         //coins
                         Text("Coins: \(user[0].coins)")
@@ -199,21 +217,59 @@ struct Dashboard: View {
                 }
                 .padding()
             }
+            .onAppear() {
+                //get the current date
+                let today = Calendar.current.startOfDay(for: Date())
+                
+                //check if the lastUpdatedDashboard variable exists
+                if let lastUpdated = lastUpdatedDashboard {
+                    //if it exists and it is before today
+                    if lastUpdated < today {
+                        //reset the daily progress
+                        user.first!.dailyProgress = 0
+                        //reset the lastUpdatedDashboard in the app settings
+                        appSettings.first?.lastUpdatedDashboard = today
+                        
+                        //save the view context
+                        do {
+                            try viewContext.save()
+                        } catch {
+                            print(error.localizedDescription)
+                        }
+                    }
+                    //if not, proceed as normal
+                } else {
+                    //no dashboard date, set the date
+                    appSettings.first?.lastUpdatedDashboard = today
+                    user.first?.dailyProgress = 0
+                    
+                    //save
+                    do {
+                        try viewContext.save()
+                    } catch {
+                        print(error.localizedDescription)
+                    }
+                }
+            }
             
         }
         .navigationBarBackButtonHidden(true)
     }
     struct DashboardProgressView: View {
         let title: String
-        let progressCeiling: Int
-        let progress: Int
+        let progressCeiling: Int // the top of the current stage
+        let progressFloor: Int // the bottom of current stage
+        let progress: Int // the number of words/minutes that the user has written
         @State var progressLevel: Double
+        var value : Double {
+            (Double(progress - progressFloor)/Double(progressCeiling - progressFloor)) * 100
+        }
         
         var body: some View {
             HStack {
                 Text(title)
                 ZStack {
-                    ProgressView(value: progressLevel)
+                    ProgressView(value: value, total: 100)
                         .border(.black, width: 0.1)
                         .scaleEffect(y:6)
                         .tint(.green)

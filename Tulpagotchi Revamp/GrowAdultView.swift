@@ -60,7 +60,7 @@ struct GrowAdultView: View {
                     .padding()
                     
                     //fetch the adult dragons that aren't the target dragon
-                    ScrollView {
+                    ScrollView (.horizontal) {
                         HStack {
                             ForEach(potentialMates) {mate in
                                 if (mate.id != dragon.id && mate.dragonAge == "Adult")
