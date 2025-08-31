@@ -14,12 +14,12 @@ struct TextFile: Transferable {
     let text: String
     
     static var transferRepresentation: some TransferRepresentation {
-        FileRepresentation(exportedContentType: .plainText) { item in
-            let url = FileManager.default.temporaryDirectory
-                .appendingPathComponent(item.fileName)
-            print("URL: \(url)")
-            try item.text.write(to: url, atomically: true, encoding: .utf8)
-            return .init(url)
+        DataRepresentation(exportedContentType: .plainText) { item in
+            Data(item.text.utf8)
+        }
+        // Tell the share sheet what to name the attachment
+        .suggestedFileName { item in
+            item.fileName.hasSuffix(".txt") ? item.fileName : item.fileName + ".txt"
         }
     }
 }
@@ -29,10 +29,8 @@ struct ExportView: View {
     let fileText: String
     
     var body: some View {
-        // Tap to share a .txt file made from your string
         ShareLink(
-            item: TextFile(fileName: fileName,
-                           text: fileText),
+            item: TextFile(fileName: fileName, text: fileText),
             preview: SharePreview(fileName)
         ) {
             Label("Export", systemImage: "square.and.arrow.up")

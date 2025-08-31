@@ -145,6 +145,7 @@ struct WritingPage: View {
                             .background(scheme == .dark ? .black : .white)
                         
                     }
+                    .buttonStyle(.plain)
                     .padding()
                     
                     TextEditor(text: $projectTitle)
@@ -189,6 +190,7 @@ struct WritingPage: View {
                 } label: {
                     Text(gameComplete ? "End your game" : "Keep Writing!")
                 }
+                .buttonStyle(.plain)
                 .padding()
                 .background(gameComplete ? .green.opacity(1) : .gray.opacity(0.5))
                 .foregroundStyle(.white)
