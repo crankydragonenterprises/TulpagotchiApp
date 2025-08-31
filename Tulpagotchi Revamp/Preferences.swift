@@ -116,7 +116,7 @@ struct Preferences: View {
 //                            exportText(compiledProjectText, as: "\(selectedProjectTitle).txt")
                             
                         } label: {
-                            ExportView(fileName: "\(selectedProjectTitle).txt", fileText: compiledProjectText)
+                            ExportView(fileName: "\(selectedProjectTitle).txt", text: compiledProjectText)
 //                            Text("Export Data")
                         }
                         .buttonStyle(.plain)
