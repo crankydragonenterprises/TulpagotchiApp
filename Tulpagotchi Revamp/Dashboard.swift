@@ -135,6 +135,7 @@ struct Dashboard: View {
                             Text("Type")
                                 .fontWeight(.bold)
                         }
+                        .buttonStyle(.plain)
                         .onChange(of: selectedType) {
                             dragons.nsPredicate = dynamicPredicate
                         }
@@ -149,6 +150,7 @@ struct Dashboard: View {
                             Text("Pattern")
                                 .fontWeight(.bold)
                         }
+                        .buttonStyle(.plain)
                         .onChange(of: selectedPattern) {
                             dragons.nsPredicate = dynamicPredicate
                         }
@@ -163,6 +165,7 @@ struct Dashboard: View {
                             Text("Color")
                                 .fontWeight(.bold)
                         }
+                        .buttonStyle(.plain)
                         .onChange(of: selectedColor) {
                             dragons.nsPredicate = dynamicPredicate
                         }
@@ -177,6 +180,7 @@ struct Dashboard: View {
                             Text("Age")
                                 .fontWeight(.bold)
                         }
+                        .buttonStyle(.plain)
                         .onChange(of: selectedAge) {
                             dragons.nsPredicate = dynamicPredicate
                         }
@@ -196,16 +200,22 @@ struct Dashboard: View {
                                     NavigationLink {
                                         GrowDragonView()
                                             .environmentObject(dragon)
-                                        //Text( dragon.dragonMain ?? "No Dragon" )
                                     } label: {
-                                        AsyncImage(url: dragon.dragonImageLocation) { image in
-                                            image
-                                                .resizable()
-                                                .scaledToFit()
-                                        } placeholder : {
-                                            ProgressView()
+                                        ZStack {
+                                            AsyncImage(url: dragon.dragonImageLocation) { image in
+                                                //VStack {
+                                                image
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .shadow(color: .white, radius: 2)
+                                                //Text(dragon.prettyName)
+                                                //}
+                                            } placeholder : {
+                                                ProgressView()
+                                            }
                                         }
                                     }
+                                    .buttonStyle(.plain)
                                     
                                 }
                             }

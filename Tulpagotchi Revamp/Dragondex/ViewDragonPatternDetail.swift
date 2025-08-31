@@ -68,6 +68,7 @@ struct ViewDragonPatternDetail: View {
                                             .padding(.horizontal)
                                             Spacer()
                                         }
+                                        .buttonStyle(.plain)
                                     }
                                 }
                                 .padding()

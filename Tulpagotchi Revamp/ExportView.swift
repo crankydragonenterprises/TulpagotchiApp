@@ -37,6 +37,7 @@ struct ExportView: View {
         ) {
             Label("Export", systemImage: "square.and.arrow.up")
         }
+        .buttonStyle(.plain)
     }
 }
 

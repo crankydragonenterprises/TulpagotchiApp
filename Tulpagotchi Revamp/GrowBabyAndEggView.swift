@@ -82,6 +82,7 @@ struct GrowBabyAndEggView: View {
                             Text("Sell for \(dragon.dragonSellingPrice / 4) coins")
                             //Text("Sell")
                         }
+                        .buttonStyle(.plain)
                         .padding()
                         .background(.orange)
                         .foregroundStyle(.black)
@@ -100,6 +101,7 @@ struct GrowBabyAndEggView: View {
                             Text("Grow for \(wordsToGrow) words")
                             
                         }
+                        .buttonStyle(.plain)
                         .padding()
                         .background(.orange)
                         .foregroundStyle(.black)

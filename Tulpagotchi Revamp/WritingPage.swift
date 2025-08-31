@@ -123,6 +123,7 @@ struct WritingPage: View {
                     }
                 }
                 .padding()
+                .padding(.bottom, -30)
                 .frame(height: isProjectTextFocused || isProjectTitleFocused ? 100 : 200)
                 
                 
@@ -159,13 +160,15 @@ struct WritingPage: View {
                 
                 //Text Area for Writing
                 CustomTextEditor(text: $projectText)
+                    .frame(height: isProjectTextFocused || isProjectTitleFocused ? 200 : 300)
                     .padding()
+                    .padding(.top, -30)
                     .onChange(of: projectText) {
                         wordCount = wordCount(in: projectText)
                     }
                     .focused($isProjectTextFocused)
                 
-                Spacer()
+                //Spacer()
                 if hasValidGoal {
                     ProgressView(
                         value: Double(wordCount),

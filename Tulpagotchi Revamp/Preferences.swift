@@ -64,8 +64,10 @@ struct Preferences: View {
                         .foregroundStyle(.white)
                         .clipShape(.capsule)
                 }
+                .buttonStyle(.plain)
             }
         }
+        .padding(.horizontal)
     }
     
     var body: some View {
@@ -97,6 +99,7 @@ struct Preferences: View {
                                 .foregroundColor(.white)
                                 .clipShape(.capsule)
                         }
+                        .buttonStyle(.plain)
                         .onAppear() {
                             if selectedProjectID == nil, let first = projects.first {
                                 selectedProjectID = first.objectID
@@ -116,6 +119,7 @@ struct Preferences: View {
                             ExportView(fileName: "\(selectedProjectTitle).txt", fileText: compiledProjectText)
 //                            Text("Export Data")
                         }
+                        .buttonStyle(.plain)
                         .frame(width: 100)
                         .padding()
                         .background( selectedProjectTitle == "Pick a project to export" ? .gray : .blue )
@@ -130,11 +134,6 @@ struct Preferences: View {
             }
             .frame(width: geo.size.width, height: geo.size.height)
             .navigationBarBackButtonHidden(true)
-//            .sheet(isPresented: $showShareSheet) {
-//                if let exportURL {
-//                    ShareSheet(activityItems: [exportURL])
-//                }
-//            }
             .alert("Preferences saved!", isPresented: $showSuccessAlert) {
                 Button("OK", role: .cancel) {}
             }
@@ -143,46 +142,6 @@ struct Preferences: View {
             }
         }
     }
-    
-//    private func exportText(_ text: String, as fileName: String) {
-//        print("exportText function called")
-//        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
-//        print("tempURL: \(tempURL)")
-//        
-//        do {
-//            try text.write(to: tempURL, atomically: true, encoding: .utf8)
-//            
-//            //present on main thread & includes a fallback string
-//            DispatchQueue.main.async {
-//                self.activityItems = [tempURL, text]
-//                self.showShareSheet = true
-//            }
-//            
-////            //SANITY CHECK
-////            let fm = FileManager.default
-////            guard fm.fileExists(atPath: tempURL.path) else {
-////                print("File not found at path: \(tempURL.path)")
-////                activityItems = [text]
-////                showShareSheet = true
-////                return
-////            }
-////            let attr = try fm.attributesOfItem(atPath: tempURL.path)
-////            let size = (attr[.size] as? NSNumber)?.intValue ?? 0
-////            guard size > 0 else {
-////                print("Export file is empty at \(tempURL)")
-////                activityItems = [text]
-////                showShareSheet = true
-////                return
-////            }
-//            
-//            activityItems = [tempURL]
-//            showShareSheet = true
-//        } catch {
-//            print("Failed to write file: \(error.localizedDescription)")
-//            activityItems = [text]
-//            showShareSheet = true
-//        }
-//    }
 
     func getProjectEntries(for projectName: String, in context: NSManagedObjectContext) -> String {
         
@@ -231,16 +190,6 @@ struct Preferences: View {
         }
     }
 }
-//
-//struct ShareSheet: UIViewControllerRepresentable {
-//    var activityItems : [Any]
-//    
-//    func makeUIViewController(context: Context) -> UIActivityViewController {
-//        UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
-//    }
-//    
-//    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
-//}
 
 #Preview {
     NavigationStack {

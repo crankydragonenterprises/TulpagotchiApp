@@ -24,30 +24,35 @@ struct Footer: View {
                 } label: {
                     FooterIcon(imageName: "house.fill", darkMode: darkMode)
                 }
+                .buttonStyle(.plain)
                 Spacer()
                 NavigationLink {
                     Dragondex().environment(\.managedObjectContext, viewContext)
                 } label : {
                     FooterIcon(imageName: "lizard.fill", darkMode: darkMode)
                 }
+                .buttonStyle(.plain)
                 Spacer()
                 NavigationLink {
                     Store().environment(\.managedObjectContext, viewContext)
                 } label: {
                     FooterIcon(imageName: "cart.fill", darkMode: darkMode)
                 }
+                .buttonStyle(.plain)
                 Spacer()
                 NavigationLink {
                     Preferences().environment(\.managedObjectContext, viewContext)
                 } label : {
                     FooterIcon(imageName: "person.fill", darkMode: darkMode)
                 }
+                .buttonStyle(.plain)
                 Spacer()
                 NavigationLink {
                     Information().environment(\.managedObjectContext, viewContext)
                 } label : {
                     FooterIcon(imageName: "info.circle.fill", darkMode: darkMode)
                 }
+                .buttonStyle(.plain)
             }
             .background(.clear)
             .padding()

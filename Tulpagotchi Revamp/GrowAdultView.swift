@@ -105,6 +105,7 @@ struct GrowAdultView: View {
                         } label : {
                             Text("Match for 300 words")
                         }
+                        .buttonStyle(.plain)
                         .padding()
                         .background(mateChosen ? .orange : .gray)
                         .foregroundStyle(.black)
@@ -131,6 +132,7 @@ struct GrowAdultView: View {
                         } label : {
                             Text("Sell for \(dragon.dragonSellingPrice) coins")
                         }
+                        .buttonStyle(.plain)
                         .padding()
                         .background(.orange)
                         .foregroundStyle(.black)
@@ -149,6 +151,7 @@ struct GrowAdultView: View {
                     } label : {
                         Text("Match Random Dragon")
                     }
+                    .buttonStyle(.plain)
                     .padding()
                     .background(.orange)
                     .foregroundStyle(.black)

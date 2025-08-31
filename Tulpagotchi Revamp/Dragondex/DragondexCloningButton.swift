@@ -50,10 +50,11 @@ struct DragondexCloningButton: View {
                     Text("Clone for\n\(cloningPrice) coins")
                         .multilineTextAlignment(.center)
                 }
+                .buttonStyle(.plain)
                 .padding()
                 .background(userHasEnoughCoins ? .yellow : .gray)
                 .foregroundColor(.black) // simpler than foregroundStyle
-                .clipShape(.capsule)
+                .clipShape(.rect(cornerRadius: 20))
                 .disabled(!userHasEnoughCoins)
                 .navigationDestination(isPresented: $returnToDashboard) {
                     Dashboard().environment(\.managedObjectContext, viewContext)

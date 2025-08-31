@@ -71,6 +71,7 @@ struct Store: View {
                                                 .resizable()
                                                 .scaledToFit()
                                                 .frame(width: 150, height: 150)
+                                                .shadow(color: .white, radius: 2)
                                                 
                                         } placeholder: {
                                             ProgressView()
@@ -84,6 +85,7 @@ struct Store: View {
                                     } label : {
                                         Text(buttonLabel)
                                     }
+                                    .buttonStyle(.plain)
                                     .padding()
                                     .background(bg)
                                     .foregroundColor(.white)

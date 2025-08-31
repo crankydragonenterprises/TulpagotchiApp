@@ -46,7 +46,7 @@ struct ContentView: View {
                         .padding()
                         .multilineTextAlignment(.center)
                     Spacer()
-                    Text("Having a hard time?\nContact us at\nsupport@crankydragonenterprises.com")
+                    Text("Having a hard time?\nContact us at\ncranky@crankydragonenterprises.com")
                         .multilineTextAlignment(.center)
                     Spacer()
                 }
@@ -89,6 +89,7 @@ struct ContentView: View {
                                 Button ("Get your first dragons", systemImage: "lizard.fill") {
                                     saveNewUser(newUserName: userName)
                                 }
+                                .buttonStyle(.plain)
                                 .buttonStyle(.borderedProminent)
                             }
                         }

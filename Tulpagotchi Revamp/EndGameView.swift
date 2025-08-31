@@ -45,6 +45,7 @@ struct EndGameView: View {
                             .background(.pink)
                             .foregroundStyle(.white)
                     }
+                    .buttonStyle(.plain)
                     .clipShape(.rect(cornerRadius: 25))
                     .padding()
                 }

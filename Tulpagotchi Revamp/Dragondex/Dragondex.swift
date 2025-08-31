@@ -64,6 +64,7 @@ struct Dragondex: View {
                                                 .padding()
                                                 Spacer()
                                             }
+                                            .buttonStyle(.plain)
                                         }
                                     }
                                     .padding()
