@@ -1,63 +1,61 @@
-//
-//  ExportView.swift
-//  Tulpagotchi Revamp
-//
-//  Created by Angela Tarbett on 8/25/25.
-//
-
 import SwiftUI
-import UIKit
-
-// 1) Write text -> temp .txt
-func writeTextFile(named: String, contents: String) throws -> URL {
-    let name = named.lowercased().hasSuffix(".txt") ? named : named + ".txt"
-    let dir = FileManager.default.temporaryDirectory
-        .appendingPathComponent("Export-\(UUID().uuidString)", isDirectory: true)
-    try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
-    let url = dir.appendingPathComponent(name)
-    try contents.write(to: url, atomically: true, encoding: .utf8)
-    return url
-}
-
-// 2) Simple share sheet
-struct ShareSheet: UIViewControllerRepresentable {
-    let items: [Any]
-    func makeUIViewController(context: Context) -> UIActivityViewController {
-        UIActivityViewController(activityItems: items, applicationActivities: nil)
-    }
-    func updateUIViewController(_: UIActivityViewController, context: Context) {}
-}
-
-// 3) Use `.sheet(item:)` so it can't present while URL is nil
-private struct ShareFile: Identifiable { let id = UUID(); let url: URL }
+import UniformTypeIdentifiers
 
 struct ExportView: View {
     let fileName: String
     let text: String
-    @State private var shareFile: ShareFile?
+    
+    @State private var showingExporter = false
     
     var body: some View {
         Button("Export") {
-            do {
-                print("text: \(text)")
-                let url = try writeTextFile(named: fileName, contents: text)
-                
-                // sanity check—helps catch silent failures
-                let size = (try? Data(contentsOf: url).count) ?? 0
-                guard size > 0 else { print("Empty file at \(url)"); return }
-                
-                shareFile = ShareFile(url: url)   // <-- setting this triggers the sheet
-            } catch {
-                print("Export failed:", error)
-            }
+            // Only trigger the exporter — no manual file write needed
+            print("Exporting text length:", text.count)
+            showingExporter = true
         }
-        .sheet(item: $shareFile, onDismiss: { shareFile = nil }) { share in
-            ShareSheet(items: [share.url])       // IMPORTANT: pass the URL, not a String
+        .fileExporter(
+            isPresented: $showingExporter,
+            document: TextDocument(text: text),
+            contentType: .plainText,
+            defaultFilename: fileName.hasSuffix(".txt") ? String(fileName.dropLast(4)) : fileName
+        ) { result in
+            switch result {
+            case .success(let url):
+                print("Saved to \(url)")
+            case .failure(let error):
+                print("Export failed:", error.localizedDescription)
+            }
         }
     }
 }
 
-// Usage:
-// ExportButton(fileName: "Notes.txt", text: "Hello, world!")
+// Minimal FileDocument for plain text
+struct TextDocument: FileDocument {
+    // Being explicit about writable types avoids odd edge cases
+    static var readableContentTypes: [UTType] { [.plainText] }
+    static var writableContentTypes: [UTType] { [.plainText] }
+    
+    var text: String
+    
+    init(text: String) {
+        self.text = text
+        
+        print("text: \(text)")
+    }
+    
+    init(configuration: ReadConfiguration) throws {
+        if let data = configuration.file.regularFileContents {
+            self.text = String(decoding: data, as: UTF8.self)
+        } else {
+            self.text = ""
+        }
+    }
+    
+    func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
+        FileWrapper(regularFileWithContents: Data(text.utf8))
+    }
+}
 
-#Preview { ExportView(fileName: "Test.txt", text: "This is a test file") }
+#Preview {
+    ExportView(fileName: "Test.txt", text: "This is a test file")
+}

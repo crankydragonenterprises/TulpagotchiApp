@@ -108,15 +108,14 @@ struct Preferences: View {
                         
                         Button {
                             print("exporting from project: \(selectedProjectTitle)")
-                            compiledProjectText = getProjectEntries(for: selectedProjectTitle, in: viewContext)
-                            print("Compiled texts: \(compiledProjectText)")
-                            
+                            //compiledProjectText = getProjectEntries(for: selectedProjectTitle, in: viewContext)
+                            //print("Compiled texts: \(compiledProjectText)")
                             
                             //TO DO - export the project data
 //                            exportText(compiledProjectText, as: "\(selectedProjectTitle).txt")
                             
                         } label: {
-                            ExportView(fileName: "\(selectedProjectTitle).txt", text: compiledProjectText)
+                            ExportView(fileName: "\(selectedProjectTitle).txt", text: getProjectEntries(for: selectedProjectTitle, in: viewContext))
 //                            Text("Export Data")
                         }
                         .buttonStyle(.plain)
