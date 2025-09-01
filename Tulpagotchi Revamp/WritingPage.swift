@@ -117,6 +117,7 @@ struct WritingPage: View {
                                 .resizable()
                                 .scaledToFit()
                                 .scaleEffect(x: xScale)
+                                .shadow(color: .white, radius: 2)
                         } placeholder: {
                             ProgressView()
                         }

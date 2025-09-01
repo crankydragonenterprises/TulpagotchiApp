@@ -54,6 +54,7 @@ struct GrowAdultView: View {
                         image
                             .resizable()
                             .scaledToFit()
+                            .shadow(color: .black, radius: 2)
                     } placeholder: {
                         ProgressView()
                     }
@@ -70,6 +71,7 @@ struct GrowAdultView: View {
                                             .resizable()
                                             .scaledToFit()
                                             .frame(width: 100, height: 100)
+                                            .shadow(color: .black, radius: 2)
                                     } placeholder: {
                                         ProgressView()
                                     }

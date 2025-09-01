@@ -42,6 +42,10 @@ struct Preferences: View {
     
     private var PreferencesSection : some View {
         VStack {
+            Spacer()
+            Text("System Preference")
+            SettingsView()
+            Spacer()
             HStack {
                 Text("Daily Goal")
                     .padding()
@@ -51,8 +55,8 @@ struct Preferences: View {
                     .padding()
                     .background(scheme == .dark ? .black : .white)
             }
-            
             HStack {
+                
                 Spacer()
                 Button {
                     savePreferences()
@@ -66,6 +70,7 @@ struct Preferences: View {
                 }
                 .buttonStyle(.plain)
             }
+            Spacer()
         }
         .padding(.horizontal)
     }
@@ -106,18 +111,9 @@ struct Preferences: View {
                             }
                         }
                         
-                        Button {
-                            print("exporting from project: \(selectedProjectTitle)")
-                            //compiledProjectText = getProjectEntries(for: selectedProjectTitle, in: viewContext)
-                            //print("Compiled texts: \(compiledProjectText)")
-                            
-                            //TO DO - export the project data
-//                            exportText(compiledProjectText, as: "\(selectedProjectTitle).txt")
-                            
-                        } label: {
-                            ExportView(fileName: "\(selectedProjectTitle).txt", text: getProjectEntries(for: selectedProjectTitle, in: viewContext))
-//                            Text("Export Data")
-                        }
+                        ExportView(
+                            fileName: "\(selectedProjectTitle).txt",
+                            text: getProjectEntries(for: selectedProjectTitle, in: viewContext))
                         .buttonStyle(.plain)
                         .frame(width: 100)
                         .padding()

@@ -50,6 +50,7 @@ struct GrowBabyAndEggView: View {
                         image
                             .resizable()
                             .scaledToFit()
+                            .shadow(color: .black, radius: 2)
                     } placeholder : {
                         ProgressView()
                     }
