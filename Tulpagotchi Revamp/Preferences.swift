@@ -34,6 +34,7 @@ struct Preferences: View {
     @State var showShareSheet: Bool = false
     @State private var exportURL: URL?
     @State private var activityItems: [Any] = []
+    @FocusState private var isTextFieldFocused : Bool
     
     private var selectedProject : Project? {
         guard let projectID = selectedProjectID else { return nil }
@@ -52,6 +53,7 @@ struct Preferences: View {
                 Spacer()
                 TextField("Words to write each day", text: $preferredGoal)
                     .keyboardType(.numberPad)
+                    .focused($isTextFieldFocused)
                     .padding()
                     .background(scheme == .dark ? .black : .white)
             }
@@ -126,6 +128,9 @@ struct Preferences: View {
                     Footer()
                 }
                 .frame(width: geo.size.width, height: geo.size.height)
+            }
+            .onTapGesture {
+                isTextFieldFocused = false
             }
             .frame(width: geo.size.width, height: geo.size.height)
             .navigationBarBackButtonHidden(true)
