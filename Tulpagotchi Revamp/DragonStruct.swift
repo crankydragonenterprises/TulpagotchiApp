@@ -18,6 +18,7 @@ struct DragonStruct : Identifiable {
     var dragonAge: DragonAge
     var dragonSellingPrice: Int = 0
     var dragonImageLocation: URL?
+    var dragonImage: Image?
     
     //initialize the dragon
     init(dragonType: DragonType, dragonPattern: DragonPattern, dragonMain: MainColor, dragonSecond: SecondaryColor, dragonAge: DragonAge, dragonSellingPrice: Int, dragonImageLocation: URL, id: String) {
@@ -140,6 +141,7 @@ struct DragonStruct : Identifiable {
         coreDataDragon.dragonImageLocation =  Utilities.returnImageLocation(dragon: coreDataDragon)
         coreDataDragon.dragonSellingPrice = Utilities.returnSellingPrice(dragon: coreDataDragon)
         coreDataDragon.dragonCloningPrice = Utilities.returnCloningPrice(type: DragonStruct.DragonType(rawValue: coreDataDragon.dragonType!) ?? DragonStruct.DragonType.Dragon, pattern: DragonStruct.DragonPattern(rawValue: coreDataDragon.dragonPattern!) ?? DragonStruct.DragonPattern.Basic, color: DragonStruct.MainColor(rawValue: coreDataDragon.dragonMain!) ?? DragonStruct.MainColor.Black, secondColor: DragonStruct.SecondaryColor(rawValue: coreDataDragon.dragonSecond!) ?? DragonStruct.SecondaryColor.Black)
+        
         
         return coreDataDragon
     }

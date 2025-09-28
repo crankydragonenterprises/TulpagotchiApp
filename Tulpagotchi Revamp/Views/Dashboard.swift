@@ -78,6 +78,14 @@ struct Dashboard: View {
         guard let u = user.first else { return "Unknown User"}
         return u.id ?? "No user ID"
     }
+    var userLevel: String {
+        guard let u = user.first else { return "Unknown User"}
+        return "\(u.level)"
+    }
+    var userCoins: String {
+        guard let u = user.first else { return "Unknown User"}
+        return "\(u.coins)"
+    }
 
     
     //Filters
@@ -85,6 +93,9 @@ struct Dashboard: View {
     @State var selectedPattern: String = "All"
     @State var selectedColor: String = "All"
     @State var selectedAge: String = "All"
+    
+    var black: Color = Color(.black)
+    var white: Color = Color(.white)
     
     var body: some View {
         NavigationStack {
@@ -94,7 +105,7 @@ struct Dashboard: View {
                     .opacity(0.7)
                     .ignoresSafeArea()
                 VStack (alignment: .leading) {
-                    Text("Hello, \(user[0].id!)")
+                    Text("Hello, \(userName)")
                         .font(.largeTitle)
                         .fontWeight(.bold)
                     
@@ -106,7 +117,7 @@ struct Dashboard: View {
                             progressFloor: Int(user.first?.levelFloor ?? 0),
                             progress: Int(user.first?.currentLevel ?? 0),
                             progressLevel: progressLevel)
-                        Text("Level \(user[0].level)")
+                        Text("Level \(userLevel)")
                         
                         //daily progress view
                         DashboardProgressView(
@@ -117,10 +128,10 @@ struct Dashboard: View {
                             progressLevel: dailyProgressPercentage)
                         
                         //coins
-                        Text("Coins: \(user[0].coins)")
+                        Text("Coins: \(userCoins)")
                     }
                     .padding()
-                    .background(scheme == .dark ? Color.black.opacity(0.5) : Color.white.opacity(0.5))
+                    .background(scheme == .dark ? black.opacity(0.5) : white.opacity(0.5))
                     
                     //Filters
                     HStack
@@ -186,8 +197,8 @@ struct Dashboard: View {
                         }
                     }
                     .padding()
-                    .background(scheme == .dark ? Color.black : Color.white)
-                    .foregroundStyle(scheme == .dark ? Color.white : Color.black)
+                    .background(scheme == .dark ? black : white)
+                    .foregroundStyle(scheme == .dark ? white : black)
                     .opacity(0.50)
                     
                     //Dragon Area
@@ -202,69 +213,78 @@ struct Dashboard: View {
                                             .environmentObject(dragon)
                                     } label: {
                                         ZStack {
-                                            AsyncImage(url: dragon.dragonImageLocation) { image in
-                                                //VStack {
-                                                image
-                                                    .resizable()
-                                                    .scaledToFit()
-                                                    .shadow(color: .white, radius: 2)
-                                                //Text(dragon.prettyName)
-                                                //}
-                                            } placeholder : {
-                                                ProgressView()
-                                            }
+//                                            if(dragon.dragonImageBinary == nil) {
+//                                                DragonThumbnailFromURL(dragonImageLocation: dragon.dragonImageLocation!)
+//                                            } else {
+                                                // show the downloaded image
+                                                DragonThumbnailFromImage(thumbnail: dragon.dragonImage)
+//                                            }
                                         }
                                     }
                                     .buttonStyle(.plain)
-                                    
                                 }
                             }
                         }
                         .padding()
                     }
-                    
                     Footer()
                 }
                 .padding()
             }
             .onAppear() {
-                //get the current date
-                let today = Calendar.current.startOfDay(for: Date())
-                
-                //check if the lastUpdatedDashboard variable exists
-                if let lastUpdated = lastUpdatedDashboard {
-                    //if it exists and it is before today
-                    if lastUpdated < today {
-                        //reset the daily progress
-                        user.first!.dailyProgress = 0
-                        //reset the lastUpdatedDashboard in the app settings
-                        appSettings.first?.lastUpdatedDashboard = today
-                        
-                        //save the view context
-                        do {
-                            try viewContext.save()
-                        } catch {
-                            print(error.localizedDescription)
-                        }
-                    }
-                    //if not, proceed as normal
-                } else {
-                    //no dashboard date, set the date
-                    appSettings.first?.lastUpdatedDashboard = today
-                    user.first?.dailyProgress = 0
-                    
-                    //save
-                    do {
-                        try viewContext.save()
-                    } catch {
-                        print(error.localizedDescription)
-                    }
-                }
+                updateDate()
+            }
+            .task {
+                await storeImages()
             }
             
         }
         .navigationBarBackButtonHidden(true)
     }
+    func updateDate() {
+        //get the current date
+        let today = Calendar.current.startOfDay(for: Date())
+        
+        //check if the lastUpdatedDashboard variable exists
+        if let lastUpdated = lastUpdatedDashboard {
+            //if it exists and it is before today
+            if lastUpdated < today {
+                //reset the daily progress
+                user.first!.dailyProgress = 0
+                //reset the lastUpdatedDashboard in the app settings
+                appSettings.first?.lastUpdatedDashboard = today
+                
+                //save the view context
+                do {
+                    try viewContext.save()
+                } catch {
+                    print(error.localizedDescription)
+                }
+            }
+            //if not, proceed as normal
+        } else {
+            //no dashboard date, set the date
+            appSettings.first?.lastUpdatedDashboard = today
+            user.first?.dailyProgress = 0
+            
+            //save
+            do {
+                try viewContext.save()
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    @MainActor
+    func storeImages() async {
+        for dragon in dragons {
+            if(dragon.dragonImageBinary == nil) {
+                await dragon.storeImageData(from: dragon.dragonImageLocation!, context: viewContext)
+            }
+        }
+    }
+    
     struct DashboardProgressView: View {
         let title: String
         let progressCeiling: Int // the top of the current stage
@@ -288,9 +308,36 @@ struct Dashboard: View {
             }
         }
     }
+    
+    struct DragonThumbnailFromURL: View {
+        var dragonImageLocation: URL
+        
+        var body: some View {
+            AsyncImage(url: dragonImageLocation) { image in
+                image
+                    .resizable()
+                    .scaledToFit()
+                    .shadow(color: .white, radius: 2)
+            } placeholder : {
+                ProgressView()
+            }
+        }
+    }
+    struct DragonThumbnailFromImage: View {
+        var thumbnail: Image
+        
+        var body: some View {
+            thumbnail
+                .resizable()
+                .scaledToFit()
+                .shadow(color: .white, radius: 2)
+        }
+    }
 }
 
 #Preview {
     Dashboard()
         .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
 }
+
+

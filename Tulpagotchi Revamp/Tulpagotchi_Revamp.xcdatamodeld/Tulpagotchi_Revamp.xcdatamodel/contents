@@ -13,6 +13,7 @@
     <entity name="Dragon" representedClassName="Dragon" syncable="YES" codeGenerationType="class">
         <attribute name="dragonAge" optional="YES" attributeType="String"/>
         <attribute name="dragonCloningPrice" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="dragonImageBinary" optional="YES" attributeType="Binary"/>
         <attribute name="dragonImageLocation" optional="YES" attributeType="URI"/>
         <attribute name="dragonMain" optional="YES" attributeType="String"/>
         <attribute name="dragonPattern" optional="YES" attributeType="String"/>
@@ -61,12 +62,12 @@
         </uniquenessConstraints>
     </entity>
     <entity name="StoreDragon" representedClassName="StoreDragon" syncable="YES" codeGenerationType="class">
-        <attribute name="color" optional="YES" attributeType="String"/>
+        <attribute name="color" attributeType="String"/>
         <attribute name="id" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="pattern" optional="YES" attributeType="String"/>
+        <attribute name="pattern" attributeType="String"/>
         <attribute name="purchased" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="secondColor" optional="YES" attributeType="String"/>
-        <attribute name="type" optional="YES" attributeType="String"/>
+        <attribute name="secondColor" attributeType="String"/>
+        <attribute name="type" attributeType="String"/>
     </entity>
     <entity name="User" representedClassName="User" syncable="YES" codeGenerationType="class">
         <attribute name="coins" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>

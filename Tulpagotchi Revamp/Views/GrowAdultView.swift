@@ -30,7 +30,8 @@ struct GrowAdultView: View {
         return DragonStruct.DragonPattern(rawValue: DragonStruct.DragonPattern.RawValue( users[0].highestPatternAllowed!)) ?? .Basic
     }
     
-    private var randomDragon: Dragon { DragonStruct.returnCoreDataDragonFromDragonStruct(dragon: DragonStruct.returnRandomDragon(age: .Adult, highestType: highestDragonType, highestPattern: highestDragonPattern), in: PersistenceController.shared.container.viewContext)
+    private var randomDragon: Dragon {
+        DragonStruct.returnCoreDataDragonFromDragonStruct(dragon: DragonStruct.returnRandomDragon(age: .Adult, highestType: highestDragonType, highestPattern: highestDragonPattern), in: PersistenceController.shared.container.viewContext)
     }
 
     @State private var showWritingPage = false
@@ -50,15 +51,11 @@ struct GrowAdultView: View {
                         .font(.largeTitle)
                         .fontWeight(.bold)
                     
-                    AsyncImage (url: dragon.dragonImageLocation) { image in
-                        image
-                            .resizable()
-                            .scaledToFit()
-                            .shadow(color: .black, radius: 2)
-                    } placeholder: {
-                        ProgressView()
-                    }
-                    .padding()
+                    dragon.dragonImage
+                        .resizable()
+                        .scaledToFit()
+                        .shadow(color: .white, radius: 2)
+                        .padding()
                     
                     //fetch the adult dragons that aren't the target dragon
                     ScrollView (.horizontal) {
@@ -66,15 +63,11 @@ struct GrowAdultView: View {
                             ForEach(potentialMates) {mate in
                                 if (mate.id != dragon.id && mate.dragonAge == "Adult")
                                 {
-                                    AsyncImage (url: mate.dragonImageLocation) { image in
-                                        image
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 100, height: 100)
-                                            .shadow(color: .black, radius: 2)
-                                    } placeholder: {
-                                        ProgressView()
-                                    }
+                                    mate.dragonImage
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 100, height: 100)
+                                        .shadow(color: .white, radius: 2)
                                     .padding()
                                     .background(selectedMate?.id == mate.id ? .blue.opacity(0.2) : .clear)
                                     .clipShape(.rect(cornerRadius: 50))
@@ -91,7 +84,6 @@ struct GrowAdultView: View {
                                     }
                                 }
                             }
-                            //Text("\(potentialMates.count)")
                         }
                     }
                     .frame(width: geo.size.width)
@@ -167,7 +159,19 @@ struct GrowAdultView: View {
                 .frame(width: geo.size.width, height: geo.size.height)
             }
             .frame(width: geo.size.width, height: geo.size.height)
+            .task {
+                await downloadImageForRandomDragon()
+            }
         }
+    }
+    
+    func downloadImageForRandomDragon() async {
+        print("randomDragon: \(randomDragon.prettyName)")
+        print("randomDragon: \(randomDragon.prettyName)")
+        print("randomDragon: \(randomDragon.prettyName)")
+        print("randomDragon: \(randomDragon.prettyName)")
+        await randomDragon.storeImageData(from: randomDragon.dragonImageLocation!, context: viewContext)
+        print("saved randomDragon: \(randomDragon.prettyName)")
     }
 }
 

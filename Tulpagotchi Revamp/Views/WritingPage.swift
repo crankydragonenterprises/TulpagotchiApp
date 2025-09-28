@@ -88,6 +88,7 @@ struct WritingPage: View {
                     .background(.gray)
                     .foregroundStyle(.white)
                     .clipShape(.capsule)
+                    .buttonStyle(.plain)
                     .alert("Cancel?",
                            isPresented: $showCancelAlert) {
                         Button("Yes, Cancel", role: .destructive) {
@@ -112,15 +113,11 @@ struct WritingPage: View {
                         let isFirst = dragons.first?.id == dragon.id
                         let xScale: CGFloat = isFirst ? -1 : 1
                         
-                        AsyncImage (url: dragon.dragonImageLocation) { image in
-                            image
-                                .resizable()
-                                .scaledToFit()
-                                .scaleEffect(x: xScale)
-                                .shadow(color: .white, radius: 2)
-                        } placeholder: {
-                            ProgressView()
-                        }
+                        dragon.dragonImage
+                            .resizable()
+                            .scaledToFit()
+                            .scaleEffect(x: xScale)
+                            .shadow(color: .white, radius: 2)
                     }
                 }
                 .padding()
