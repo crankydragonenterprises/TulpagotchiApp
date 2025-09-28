@@ -89,15 +89,15 @@ struct DragonStruct : Identifiable {
     
     //return the image location
     static func returnImageLocation(dragon: DragonStruct, owned: Bool = true) -> URL {
-        let baseURL = "\(Constants.imageBaseUrl)/images/tulpagotchi-images/"
+        //let baseURL = "\(Constants.imageBaseUrl)/images/tulpagotchi-images/"
         var imageURL: String = ""
         
         if !owned {
-            imageURL = baseURL + "tulpagotchi-images/\(dragon.dragonType)/\(dragon.dragonType)Shadow.png"
+            imageURL = "\(dragon.dragonType)/\(dragon.dragonType)Shadow.png"
         } else if dragon.dragonAge == DragonStruct.DragonAge.Egg {
-            imageURL = "\(Constants.imageBaseUrl)/images/egg.png"
+            imageURL = "egg.png"
         } else {
-            imageURL = baseURL +  "\(dragon.dragonType)/\(dragon.dragonPattern)/\(dragon.dragonPattern)_\(dragon.dragonAge)/\(dragon.dragonPattern)_\(dragon.dragonAge)_\(dragon.dragonMain)_\(dragon.dragonSecond).png"
+            imageURL =  "\(dragon.dragonType)/\(dragon.dragonPattern)/\(dragon.dragonPattern)_\(dragon.dragonAge)/\(dragon.dragonPattern)_\(dragon.dragonAge)_\(dragon.dragonMain)_\(dragon.dragonSecond).png"
         }
         return URL(string: imageURL)!
         

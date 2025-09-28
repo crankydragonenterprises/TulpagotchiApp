@@ -6,5 +6,5 @@
 //
 
 enum Constants {
-    static let imageBaseUrl = "https://tulpagotchi-images.s3.us-east-1.amazonaws.com"
+    //static let imageBaseUrl = "https://tulpagotchi-images.s3.us-east-1.amazonaws.com"
 }

@@ -129,9 +129,9 @@ struct ViewDragonTypeDetail: View {
         forPattern dragonPattern: String) -> URL
     {
         if dragonPresentInDragondex(type: dragonType, pattern: dragonPattern) {
-            return URL(string: "\(Constants.imageBaseUrl)/images/tulpagotchi-images/\(dragonType)/\(dragonPattern)/\(dragonPattern)_Baby/\(dragonPattern)_Baby_Black_White.png") ?? URL(string:"\(Constants.imageBaseUrl)/images/egg.png")!
+            return URL(string: "\(dragonType)/\(dragonPattern)/\(dragonPattern)_Baby/\(dragonPattern)_Baby_Black_White.png") ?? URL(string:"egg.png")!
         } else {
-            return URL(string: "\(Constants.imageBaseUrl)/images/tulpagotchi-images/\(dragonType)/\(dragonType)Shadow.png") ?? URL(string:"\(Constants.imageBaseUrl)/images/egg.png")!
+            return URL(string: "\(dragonType)/\(dragonType)Shadow.png") ?? URL(string:"egg.png")!
         }
     }
 }

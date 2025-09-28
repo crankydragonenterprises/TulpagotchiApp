@@ -111,9 +111,9 @@ struct ViewDragonColorDetail: View {
         forSecondcolor dragonSecondaryColor: String) -> URL
     {
         if dragonPresentInDragondex(type: dragonType, pattern: dragonPattern, color: dragonColor, secondColor: dragonSecondaryColor) {
-            return URL(string: "\(Constants.imageBaseUrl)/images/tulpagotchi-images/\(dragonType)/\(dragonPattern)/\(dragonPattern)_Baby/\(dragonPattern)_Baby_\(dragonColor)_\(dragonSecondaryColor).png") ?? URL(string:"\(Constants.imageBaseUrl)/images/egg.png")!
+            return URL(string: "\(dragonType)/\(dragonPattern)/\(dragonPattern)_Baby/\(dragonPattern)_Baby_\(dragonColor)_\(dragonSecondaryColor).png") ?? URL(string:"egg.png")!
         } else {
-            return URL(string: "\(Constants.imageBaseUrl)/images/tulpagotchi-images/\(dragonType)/\(dragonType)Shadow.png") ?? URL(string:"\(Constants.imageBaseUrl)/images/egg.png")!
+            return URL(string: "\(dragonType)/\(dragonType)Shadow.png") ?? URL(string:"egg.png")!
         }
     }
     

@@ -46,16 +46,16 @@ enum Utilities {
     
     //return the image location
     static func returnImageLocation(dragon: Dragon, owned: Bool = true) -> URL {
-        let baseURL = "\(Constants.imageBaseUrl)/images/tulpagotchi-images/"
+        //let baseURL = "\(Constants.imageBaseUrl)/images/tulpagotchi-images/"
         var imageURL: String = ""
         
         if !owned {
-            imageURL = baseURL + "tulpagotchi-images/\(dragon.dragonType ?? "Dragon")/\(dragon.dragonType ?? "Dragon")Shadow.png"
+            imageURL = "\(dragon.dragonType ?? "Dragon")/\(dragon.dragonType ?? "Dragon")Shadow.png"
         } else if dragon.dragonAge == DragonStruct.DragonAge.Egg.rawValue {
-            imageURL = "\(Constants.imageBaseUrl)/images/egg.png"
+            imageURL = "egg.png"
         } else {
             //Dragon/Basic/Basic_Baby/Basic_Baby_Black_Black.png
-            imageURL = baseURL +  "\(dragon.dragonType ?? "Dragon")/\(dragon.dragonPattern ?? "Basic")/\(dragon.dragonPattern ?? "Basic")_\(dragon.dragonAge ?? "Baby")/\(dragon.dragonPattern ?? "Basic")_\(dragon.dragonAge ?? "Baby")_\(dragon.dragonMain ?? "Black")_\(dragon.dragonSecond ?? "Black").png"
+            imageURL = "\(dragon.dragonType ?? "Dragon")/\(dragon.dragonPattern ?? "Basic")/\(dragon.dragonPattern ?? "Basic")_\(dragon.dragonAge ?? "Baby")/\(dragon.dragonPattern ?? "Basic")_\(dragon.dragonAge ?? "Baby")_\(dragon.dragonMain ?? "Black")_\(dragon.dragonSecond ?? "Black").png"
         }
         return URL(string: imageURL)!
         
