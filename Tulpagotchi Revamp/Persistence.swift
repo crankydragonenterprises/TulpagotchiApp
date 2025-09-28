@@ -127,6 +127,21 @@ struct PersistenceController {
             color: DragonStruct.MainColor(rawValue: newDragon3.dragonMain!) ?? DragonStruct.MainColor.Black,
             secondColor: DragonStruct.SecondaryColor(rawValue: newDragon3.dragonSecond!) ?? DragonStruct.SecondaryColor.Black)
         
+        let randomDragon = Dragon(context: viewContext)
+        randomDragon.id = Utilities.generateRandomGuid(length: 10)
+        randomDragon.dragonType =  DragonStruct.DragonType.Dragon.rawValue
+        randomDragon.dragonPattern = DragonStruct.DragonPattern.Basic.rawValue
+        randomDragon.dragonMain = DragonStruct.MainColor.Brown.rawValue
+        randomDragon.dragonSecond = DragonStruct.SecondaryColor.Brown.rawValue
+        randomDragon.dragonAge = DragonStruct.DragonAge.Egg.rawValue
+        randomDragon.dragonImageLocation =  Utilities.returnImageLocation(dragon: randomDragon)
+        randomDragon.dragonSellingPrice = Utilities.returnSellingPrice(dragon: randomDragon)
+        randomDragon.dragonCloningPrice = Utilities.returnCloningPrice(
+            type: DragonStruct.DragonType(rawValue: randomDragon.dragonType!) ?? DragonStruct.DragonType.Dragon,
+            pattern: DragonStruct.DragonPattern(rawValue: randomDragon.dragonPattern!) ?? DragonStruct.DragonPattern.Basic,
+            color: DragonStruct.MainColor(rawValue: randomDragon.dragonMain!) ?? DragonStruct.MainColor.Black,
+            secondColor: DragonStruct.SecondaryColor(rawValue: randomDragon.dragonSecond!) ?? DragonStruct.SecondaryColor.Black)
+        
         let dragondexEntry1 = DragondexEntry(context: viewContext)
         dragondexEntry1.id = 1
         dragondexEntry1.type = "Dragon"

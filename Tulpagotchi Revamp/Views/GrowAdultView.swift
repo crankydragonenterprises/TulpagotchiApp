@@ -30,9 +30,7 @@ struct GrowAdultView: View {
         return DragonStruct.DragonPattern(rawValue: DragonStruct.DragonPattern.RawValue( users[0].highestPatternAllowed!)) ?? .Basic
     }
     
-    private var randomDragon: Dragon {
-        DragonStruct.returnCoreDataDragonFromDragonStruct(dragon: DragonStruct.returnRandomDragon(age: .Adult, highestType: highestDragonType, highestPattern: highestDragonPattern), in: PersistenceController.shared.container.viewContext)
-    }
+    @State var randomDragon: Dragon
 
     @State private var showWritingPage = false
     @State var returnToDashboard = false
@@ -160,6 +158,7 @@ struct GrowAdultView: View {
             }
             .frame(width: geo.size.width, height: geo.size.height)
             .task {
+                randomDragon = DragonStruct.returnCoreDataDragonFromDragonStruct(dragon: DragonStruct.returnRandomDragon(age: .Adult, highestType: highestDragonType, highestPattern: highestDragonPattern), in: PersistenceController.shared.container.viewContext)
                 await downloadImageForRandomDragon()
             }
         }
@@ -167,17 +166,16 @@ struct GrowAdultView: View {
     
     func downloadImageForRandomDragon() async {
         print("randomDragon: \(randomDragon.prettyName)")
-        print("randomDragon: \(randomDragon.prettyName)")
-        print("randomDragon: \(randomDragon.prettyName)")
-        print("randomDragon: \(randomDragon.prettyName)")
-        await randomDragon.storeImageData(from: randomDragon.dragonImageLocation!, context: viewContext)
+        await randomDragon.storeImageData(from: (randomDragon.dragonImageLocation ?? URL(string: "www.google.com")!), context: viewContext)
         print("saved randomDragon: \(randomDragon.prettyName)")
     }
 }
 
 #Preview {
+    let randomDragon: Dragon = DragonStruct.returnCoreDataDragonFromDragonStruct(dragon: DragonStruct.returnRandomDragon(age: .Adult, highestType: DragonStruct.DragonType.Cthulhu, highestPattern: DragonStruct.DragonPattern.Mottled), in: PersistenceController.shared.container.viewContext)
     NavigationStack {
-        GrowAdultView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)            .environmentObject(PersistenceController.previewDragon)
+        GrowAdultView(randomDragon: randomDragon)
+            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)            .environmentObject(PersistenceController.previewDragon)
     }
 
 }

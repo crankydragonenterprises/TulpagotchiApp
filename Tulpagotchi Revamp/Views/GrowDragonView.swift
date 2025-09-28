@@ -17,7 +17,7 @@ struct GrowDragonView: View {
             GrowBabyAndEggView()
                 .environmentObject(dragon)
         } else if dragon.dragonAge == "Adult" {
-            GrowAdultView()
+            GrowAdultView(randomDragon: DragonStruct.returnCoreDataDragonFromDragonStruct(dragon: DragonStruct.returnRandomDragon(age: .Adult, highestType: DragonStruct.DragonType.Cthulhu, highestPattern: DragonStruct.DragonPattern.Mottled), in: PersistenceController.shared.container.viewContext))
         }
         else {
             Text(dragon.prettyName)
