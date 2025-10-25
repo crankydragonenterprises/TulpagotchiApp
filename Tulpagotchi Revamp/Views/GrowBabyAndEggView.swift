@@ -13,22 +13,11 @@ struct GrowBabyAndEggView: View {
     @Environment(\.managedObjectContext) private var viewContext
     
     @EnvironmentObject private var dragon: Dragon
-//    
+    
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \User.id, ascending: true)],
         animation: .default)
     private var user: FetchedResults<User>
-//
-//    var User: User {
-//        let context = viewContext
-//        
-//        let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
-//        fetchRequest.fetchLimit = 1
-//        
-//        let results = try! context.fetch(fetchRequest)
-//        
-//        return results.first!
-//    }
     
     @State var returnToDashboard = false
     
@@ -46,15 +35,11 @@ struct GrowBabyAndEggView: View {
                         .font(.largeTitle)
                         .fontWeight(.bold)
                     
-                    AsyncImage(url: dragon.dragonImageLocation) { image in
-                        image
-                            .resizable()
-                            .scaledToFit()
-                            .shadow(color: .black, radius: 2)
-                    } placeholder : {
-                        ProgressView()
-                    }
-                    .padding()
+                    dragon.dragonImage
+                        .resizable()
+                        .scaledToFit()
+                        .shadow(color: .black, radius: 2)
+                        .padding()
                     
                     HStack {
                         

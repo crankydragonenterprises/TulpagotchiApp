@@ -104,7 +104,6 @@ struct ContentView: View {
     }
     
     func saveNewUser(newUserName: String) {
-        
         let newUser = User(context: viewContext)
         newUser.id = newUserName
         newUser.level = 1
@@ -127,7 +126,6 @@ struct ContentView: View {
         newDragon1.dragonImageLocation =  Utilities.returnImageLocation(dragon: newDragon1)
         newDragon1.dragonSellingPrice = Utilities.returnSellingPrice(dragon: newDragon1)
         newDragon1.dragonCloningPrice = Utilities.returnCloningPrice(type: DragonStruct.DragonType(rawValue: newDragon1.dragonType!) ?? DragonStruct.DragonType.Dragon, pattern: DragonStruct.DragonPattern(rawValue: newDragon1.dragonPattern!) ?? DragonStruct.DragonPattern.Basic, color: DragonStruct.MainColor(rawValue: newDragon1.dragonMain!) ?? DragonStruct.MainColor.Black, secondColor: DragonStruct.SecondaryColor(rawValue: newDragon1.dragonSecond!) ?? DragonStruct.SecondaryColor.Black)
-        
         
         let newDragon2 = Dragon(context: viewContext)
         newDragon2.id = Utilities.generateRandomGuid(length: 10)

@@ -65,17 +65,15 @@ struct Store: View {
                                 let buttonLabel = "Buy for \(dragon.dragonSellingPrice) coins"
                                 
                                 HStack {
-                                    VStack {
-                                        AsyncImage(url: imageURL) { image in
-                                            image
-                                                .resizable()
-                                                .scaledToFit()
-                                                .frame(width: 150, height: 150)
-                                                .shadow(color: .white, radius: 2)
-                                                
-                                        } placeholder: {
-                                            ProgressView()
-                                        }
+                                    AsyncImage(url: imageURL) { image in
+                                        image
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 150, height: 150)
+                                            .shadow(color: .white, radius: 2)
+                                            
+                                    } placeholder: {
+                                        ProgressView()
                                     }
                                     Spacer()
                                     Button {
@@ -125,10 +123,19 @@ struct Store: View {
                 // No stored date yet → treat as "needs update"
                 updateStoreDragons()
             }
-
         }
+//        .task {
+//            await downloadStoreImages()
+//        }
     }
-    
+//    @MainActor
+//    func downloadStoreImages() async {
+//        for dragon in storeDragons {
+//            if(dragon.imageBinary == nil) {
+//                await dragon.storeImageDataForStoreDragon(from: dragon.storeDragonImageLocation, context: viewContext)
+//            }
+//        }
+//    }
     func makeDragonStructsFromCoreDataStoreDragon () -> [DragonStruct] {
         var dragons : [DragonStruct] = []
         

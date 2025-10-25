@@ -88,6 +88,7 @@ struct WritingPage: View {
                     .background(.gray)
                     .foregroundStyle(.white)
                     .clipShape(.capsule)
+                    .buttonStyle(.plain)
                     .alert("Cancel?",
                            isPresented: $showCancelAlert) {
                         Button("Yes, Cancel", role: .destructive) {
@@ -117,10 +118,11 @@ struct WritingPage: View {
                                 .resizable()
                                 .scaledToFit()
                                 .scaleEffect(x: xScale)
-                                .shadow(color: .white, radius: 2)
+                                .shadow(color: .black, radius: 2)
                         } placeholder: {
                             ProgressView()
                         }
+                        .padding()
                     }
                 }
                 .padding()
@@ -400,6 +402,7 @@ struct WritingPage: View {
         if dragon.dragonAge == "Baby" {
             dragon.dragonAge = "Adult"
             dragon.dragonImageLocation = Utilities.returnImageLocation(dragon: dragon)
+            dragon.dragonImageBinary = nil
             dragon.dragonSellingPrice = Utilities.returnSellingPrice(dragon: dragon)
         }
         
@@ -407,6 +410,7 @@ struct WritingPage: View {
         if dragon.dragonAge == "Egg" {
             dragon.dragonAge = "Baby"
             dragon.dragonImageLocation = Utilities.returnImageLocation(dragon: dragon)
+            dragon.dragonImageBinary = nil
             dragon.dragonSellingPrice = Utilities.returnSellingPrice(dragon: dragon)
         }
         
