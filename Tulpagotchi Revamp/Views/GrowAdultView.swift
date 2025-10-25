@@ -49,11 +49,15 @@ struct GrowAdultView: View {
                         .font(.largeTitle)
                         .fontWeight(.bold)
                     
-                    dragon.dragonImage
-                        .resizable()
-                        .scaledToFit()
-                        .shadow(color: .white, radius: 2)
-                        .padding()
+                    AsyncImage (url: dragon.dragonImageLocation) { image in
+                        image
+                            .resizable()
+                            .scaledToFit()
+                            .shadow(color: .black, radius: 2)
+                    } placeholder: {
+                        ProgressView()
+                    }
+                    .padding()
                     
                     //fetch the adult dragons that aren't the target dragon
                     ScrollView (.horizontal) {
@@ -61,11 +65,16 @@ struct GrowAdultView: View {
                             ForEach(potentialMates) {mate in
                                 if (mate.id != dragon.id && mate.dragonAge == "Adult")
                                 {
-                                    mate.dragonImage
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 100, height: 100)
-                                        .shadow(color: .white, radius: 2)
+                                    
+                                    AsyncImage (url: mate.dragonImageLocation) { image in
+                                        image
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 100, height: 100)
+                                            .shadow(color: .black, radius: 2)
+                                    } placeholder: {
+                                        ProgressView()
+                                    }
                                     .padding()
                                     .background(selectedMate?.id == mate.id ? .blue.opacity(0.2) : .clear)
                                     .clipShape(.rect(cornerRadius: 50))

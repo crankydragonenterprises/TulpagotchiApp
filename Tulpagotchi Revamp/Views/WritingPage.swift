@@ -113,11 +113,16 @@ struct WritingPage: View {
                         let isFirst = dragons.first?.id == dragon.id
                         let xScale: CGFloat = isFirst ? -1 : 1
                         
-                        dragon.dragonImage
-                            .resizable()
-                            .scaledToFit()
-                            .scaleEffect(x: xScale)
-                            .shadow(color: .white, radius: 2)
+                        AsyncImage (url: dragon.dragonImageLocation) { image in
+                            image
+                                .resizable()
+                                .scaledToFit()
+                                .scaleEffect(x: xScale)
+                                .shadow(color: .black, radius: 2)
+                        } placeholder: {
+                            ProgressView()
+                        }
+                        .padding()
                     }
                 }
                 .padding()
@@ -397,6 +402,7 @@ struct WritingPage: View {
         if dragon.dragonAge == "Baby" {
             dragon.dragonAge = "Adult"
             dragon.dragonImageLocation = Utilities.returnImageLocation(dragon: dragon)
+            dragon.dragonImageBinary = nil
             dragon.dragonSellingPrice = Utilities.returnSellingPrice(dragon: dragon)
         }
         
@@ -404,6 +410,7 @@ struct WritingPage: View {
         if dragon.dragonAge == "Egg" {
             dragon.dragonAge = "Baby"
             dragon.dragonImageLocation = Utilities.returnImageLocation(dragon: dragon)
+            dragon.dragonImageBinary = nil
             dragon.dragonSellingPrice = Utilities.returnSellingPrice(dragon: dragon)
         }
         
