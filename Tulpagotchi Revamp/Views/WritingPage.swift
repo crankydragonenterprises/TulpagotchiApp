@@ -381,6 +381,7 @@ struct WritingPage: View {
             newDragon.dragonCloningPrice = Utilities.returnCloningPrice(type: newDragonStruct.dragonType, pattern: newDragonStruct.dragonPattern, color: newDragonStruct.dragonMain, secondColor: newDragonStruct.dragonSecond)
             
             newDragon.dragonImageLocation = Utilities.returnImageLocation(dragon: newDragon)
+            newDragon.dragonImageBinary = nil
             
             //check if the new dragon is in the dragondex; add it if not
             if !dragonPresentInDragondex(type: newDragon.dragonType!, pattern: newDragon.dragonPattern!, color: newDragon.dragonMain!, secondColor: newDragon.dragonSecond!) {

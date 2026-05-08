@@ -213,12 +213,18 @@ struct Dashboard: View {
                                             .environmentObject(dragon)
                                     } label: {
                                         ZStack {
-//                                            if(dragon.dragonImageBinary == nil) {
-//                                                DragonThumbnailFromURL(dragonImageLocation: dragon.dragonImageLocation!)
-//                                            } else {
-                                                // show the downloaded image
-                                                DragonThumbnailFromImage(thumbnail: dragon.dragonImage)
-//                                            }
+                                            AsyncImage(url: dragon.dragonImageLocation)
+                                            {
+                                                image in
+                                                image
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(width: 100, height: 100)
+                                                    .shadow(color: .black, radius: 2)
+                                            } placeholder: {
+                                                ProgressView()
+                                            }
+                                            
                                         }
                                     }
                                     .buttonStyle(.plain)

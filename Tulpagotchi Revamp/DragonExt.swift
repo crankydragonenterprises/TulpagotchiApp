@@ -5,7 +5,7 @@
 //  Created by Angela Tarbett on 8/16/25.
 //
 
-import SwiftUICore
+import SwiftUI
 import UIKit
 import CoreData
 
